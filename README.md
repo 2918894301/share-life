@@ -1,42 +1,52 @@
 # 享生活社区微信小程序
-一个分享个人生活的微信小程序，使用微信原生框架开发，后端使用Node.js+MySQL+Express开发。
+
+一个分享个人生活的微信小程序，使用微信原生框架开发，后端使用 Node.js+MySQL+Express 开发。
 
 ## 效果展示
+
 ### 首页
 
-<img src="assets/render/IMG_6051.PNG" alt="首页" style="zoom:25%;" />
+<img src="assets/render/IMG_6051.PNG" alt="首页" style="width:25%" />
 
 ### 视频详情页
 
 <div style="display: flex;">
-  <img src="assets/render/IMG_6043.PNG" alt="视频详情页" style="zoom:25%;" />
-  <img src="assets/render/IMG_6049.PNG" alt="视频详情页" style="zoom:25%;" />
+  <img src="assets/render/IMG_6043.PNG" alt="视频详情页" style="width:25%" />
+  <img src="assets/render/IMG_6049.PNG" alt="视频详情页" style="width:25%" />
 </div>
 
 ### 评论详情页
-<img src="assets/render/IMG_6044.PNG" alt="评论详情页" style="zoom:25%;" />
+
+<img src="assets/render/IMG_6044.PNG" alt="评论详情页" style="width:25%" />
 
 ### 图片详情页
-<img src="assets/render/IMG_6045.PNG" alt="图片详情页" style="zoom:25%;" />
+
+<img src="assets/render/IMG_6045.PNG" alt="图片详情页" style="width:25%" />
 
 ### 发布页
-<img src="assets/render/IMG_6046.PNG" alt="发布页" style="zoom:25%;" />
+
+<img src="assets/render/IMG_6046.PNG" alt="发布页" style="width:25%" />
 
 ### 个人中心页
-<img src="assets/render/IMG_6047.PNG" alt="个人中心页" style="zoom:25%;" />
+
+<img src="assets/render/IMG_6047.PNG" alt="个人中心页" style="width:25%" />
 
 ### 设置页
-<img src="assets/render/IMG_6048.PNG" alt="设置页" style="zoom:25%;" />
+
+<img src="assets/render/IMG_6048.PNG" alt="设置页" style="width:25%" />
 
 ### 搜索页
-<img src="assets/render/IMG_6052.PNG" alt="搜索页" style="zoom:25%;" />
+
+<img src="assets/render/IMG_6052.PNG" alt="搜索页" style="width:25%" />
 
 ### 收藏
-<img src="assets/render/IMG_6050.PNG" alt="收藏" style="zoom:25%;" />
+
+<img src="assets/render/IMG_6050.PNG" alt="收藏" style="width:25%" />
 
 ## 功能特性
 
 ### 用户系统
+
 - 用户登录与注册
 - 个人信息管理
   - 头像上传和更新
@@ -48,6 +58,7 @@
   - 个性签名展示
 
 ### 内容管理
+
 - 笔记管理
   - 笔记列表展示
   - 笔记卡片式布局
@@ -62,6 +73,7 @@
   - 点赞内容管理
 
 ### 界面特性
+
 - 现代化 UI 设计
   - 渐变色背景
   - 圆角设计
@@ -77,6 +89,7 @@
   - 自适应内容高度
 
 ## 技术栈
+
 - 微信小程序原生框架
 - 后端 Node.js + Express + MySQL
   - Express 框架
@@ -122,7 +135,7 @@
 - 搜索页面
 - 发布页面基础布局
 - 签名设置功能
-- 
+-
 
 ## 待实现功能
 
@@ -132,17 +145,19 @@
 - 分享功
 
 ## 开发环境
+
 - 微信开发者工具
 
 ## 如何运行
 
 - 克隆项目到本地
 - 在微信开发者工具中导入项目
-- 修改request.js中的BASE_URL
+- 修改 request.js 中的 BASE_URL
 - 编译运行项目
 
 ## 注意事项
+
 - 需要在微信开发者工具中开启 ES6 转 ES5 功能
 - 建议使用最新版本的微信开发者工具
-- 项目使用轻量网络请求封装，支持GET/POST/PUT/DELETE等请求方式
-- 请求封装包含统一BASE_URL、加载提示、错误提示和自动鉴权功能
+- 项目使用轻量网络请求封装，支持 GET/POST/PUT/DELETE 等请求方式
+- 请求封装包含统一 BASE_URL、加载提示、错误提示和自动鉴权功能
