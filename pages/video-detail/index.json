@@ -1,0 +1,9 @@
+{
+  "navigationStyle": "custom",
+  "navigationBarTextStyle": "white",
+  "disableScroll": true,
+  "usingComponents": {
+    "follow-button": "/components/follow-button/index",
+    "comment-input": "/components/comment-input/index"
+  }
+}

@@ -1,0 +1,60 @@
+<!-- 首页模板 - 
+  包含：自定义导航栏、分类导航、瀑布流内容、下拉刷新 -->
+<!-- 自定义导航栏 - 顶部固定，包含logo、搜索框和更多按钮 -->
+<view class="custom-nav" style="padding-top:{{statusBarHeight}}px">
+  <view class="search-container">
+    <!-- 应用logo -->
+    <view class="logo">
+      <image src="/assets/images/logo.svg" mode="aspectFit" class="logo-image" />
+    </view>
+    <!-- 搜索框 - 点击跳转到搜索页面 -->
+    <view class="search-box" bindtap="goToSearch">
+      <view class="search-icon"></view>
+      <input type="text" placeholder="搜点什么" placeholder-class="search-placeholder" disabled />
+    </view>
+    <!-- 更多操作按钮（预留） -->
+    <image class="more-icon"></image>
+  </view>
+</view>
+<!-- 分类导航栏 - 水平滚动的分类标签 -->
+<view class="nav-container" style="top:{{statusBarHeight + 44}}px">
+  <scroll-view scroll-x class="nav-scroll" enable-flex>
+    <!-- 分类标签循环渲染 -->
+    <view class="nav-item {{currentTab === index ? 'active' : ''}}" wx:for="{{categories}}" wx:key="id" bindtap="switchTab" data-index="{{index}}">
+      {{item.name}}
+    </view>
+  </scroll-view>
+</view>
+<scroll-view class="scrollarea" scroll-y type="list" bindscrolltolower="onReachBottom" enable-back-to-top enhanced show-scrollbar="{{false}}" refresher-enabled="{{true}}" refresher-threshold="{{80}}" refresher-default-style="none" refresher-background="transparent" refresher-triggered="{{isRefreshing}}" bindrefresherrefresh="onPullDownRefresh" style="padding-top:{{navHeight + 44}}px">
+  <!-- 自定义下拉刷新指示器  定义下拉刷新插槽 -->
+  <view slot="refresher" class="custom-refresher">
+    <view class="refresher-content">
+      <view class="refresher-icon {{isRefreshing ? 'rotating' : ''}}">⟳</view>
+      <text class="refresher-text">{{isRefreshing ? '正在刷新...' : '下拉刷新'}}</text>
+    </view>
+  </view>
+  <!-- 瀑布流内容列表 - 双列布局展示笔记 -->
+  <view class="waterfall-container">
+    <!-- 左列笔记 -->
+    <view class="waterfall-left">
+      <view wx:for="{{leftList}}" wx:key="id" class="waterfall-item">
+        <note-card note="{{item}}" bind:likeChanged="onLikeChanged"></note-card>
+      </view>
+    </view>
+    <!-- 右列笔记 -->
+    <view class="waterfall-right">
+      <view wx:for="{{rightList}}" wx:key="id" class="waterfall-item">
+        <note-card note="{{item}}" bind:likeChanged="onLikeChanged"></note-card>
+      </view>
+    </view>
+  </view>
+  <!-- 加载状态提示 -->
+  <view class="load-status" wx:if="{{contentList.length > 0}}">
+    <view wx:if="{{hasMore}}" class="loading-text">正在加载更多...</view>
+    <view wx:else class="no-more-text">没有更多了</view>
+  </view>
+  <!-- 空状态提示 - 没有内容时显示 -->
+  <view wx:if="{{contentList.length === 0 && !isRefreshing}}" class="empty-state">
+    <text>暂无内容</text>
+  </view>
+</scroll-view>

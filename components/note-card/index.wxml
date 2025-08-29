@@ -1,0 +1,27 @@
+<!-- 笔记卡片组件模板 - 类似小红书的卡片样式
+  包含封面图、标题、作者信息和点赞功能 -->
+<view class="note-card" bindtap="onTapCard">
+  <!-- 笔记封面图片 -->
+  <image class="note-image-element" src="{{note.coverImageUrl}}" mode="widthFix" lazy-load="true"></image>
+  <!-- 视频播放图标 - 仅在视频笔记时显示 -->
+  <view class="video-icon" wx:if="{{note.isVideo}}">
+    <view class="icon-inner"></view>
+  </view>
+  <!-- 笔记内容信息区域 -->
+  <view class="note-content">
+    <!-- 笔记标题 -->
+    <view class="note-title">{{note.title}}</view>
+    <!-- 作者信息栏 -->
+    <view class="note-author">
+      <!-- 作者头像 -->
+      <image class="author-avatar" src="{{note.user.avatar}}" mode="aspectFill"></image>
+      <!-- 作者昵称 -->
+      <text class="author-name">{{note.user.nickname || note.user.username}}</text>
+      <!-- catchtap阻止事件冒泡 -->
+      <view class="like-count {{note.isLiked ? 'liked' : ''}}" catchtap="onTapLike">
+        <view class="like-icon {{note.isLiked ? 'active' : ''}}"></view>
+        <text class="count">{{note.likeCount}}</text>
+      </view>
+    </view>
+  </view>
+</view>

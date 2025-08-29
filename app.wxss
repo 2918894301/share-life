@@ -1,0 +1,15 @@
+/**
+ * 全局样式文件 - 享生活社区小程序
+ * 定义全局通用样式和布局
+ */
+
+/* 全局容器样式 - 通用的页面布局容器 */
+.container {
+  height: 100%; 
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: space-between; 
+  padding: 200rpx 0; 
+  box-sizing: border-box;
+}

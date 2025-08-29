@@ -1,0 +1,255 @@
+/**index.wxss**/
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f4f4f4;
+}
+
+.custom-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  z-index: 100;
+}
+
+
+
+.scrollarea {
+  flex: 1;
+  height: 100%;
+  background: #f4f4f4;
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+
+
+.search-container {
+  width: 85%;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.logo {
+  width: 80px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.logo-image {
+  width: 100%;
+  height: 100%;
+}
+
+.search-box {
+  flex: 1;
+  height: 32px;
+  background: #f6f6f6;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  margin-right: 8px;
+}
+
+.search-icon {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #999;
+  border-radius: 50%;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.search-icon::after {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 6px;
+  background: #999;
+  bottom: -4px;
+  right: -4px;
+  transform: rotate(-45deg);
+}
+
+.more-icon {
+  width: 24px;
+  height: 24px;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+input {
+  flex: 1;
+  font-size: 13px;
+}
+
+.search-placeholder {
+  color: #999;
+  font-size: 13px;
+}
+
+.nav-container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  background: #fff;
+  z-index: 99;
+  height: 44px;
+}
+
+.nav-scroll {
+  white-space: nowrap;
+  height: 40px;
+  padding: 0 12px;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.nav-item {
+  display: inline-block;
+  padding: 0 12px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  color: #666;
+}
+
+.nav-item.active {
+  color: #333;
+  font-weight: bold;
+  position: relative;
+}
+
+.nav-item.active::after {
+  content: "";
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 2px;
+  background: #333;
+}
+
+.content-list {
+  background: #f4f4f4;
+  padding-bottom: calc(50px + env(safe-area-inset-bottom));
+}
+
+/* 瀑布流布局 */
+.waterfall-container {
+  display: flex;
+  padding: 12rpx;
+  gap: 12rpx;
+  box-sizing: border-box;
+  /* background: #f8f8f8; */
+  min-height: 100vh;
+}
+
+.waterfall-left,
+.waterfall-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.waterfall-item {
+  margin-bottom: 16rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.waterfall-item:active {
+  transform: scale(0.98);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.12);
+}
+
+
+
+/* 加载状态样式 */
+.load-status {
+  text-align: center;
+  padding: 30rpx 0;
+  margin-bottom: calc(120rpx + env(safe-area-inset-bottom));
+}
+
+.loading-text {
+  color: #999;
+  font-size: 24rpx;
+}
+
+.no-more-text {
+  color: #ccc;
+  font-size: 24rpx;
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  color: #999;
+  font-size: 28rpx;
+}
+
+
+
+/* 自定义下拉刷新样式 */
+.custom-refresher {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.refresher-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.refresher-icon {
+  font-size: 20px;
+  color: #666;
+  margin-bottom: 8px;
+  transition: all 0.6s ease;
+}
+
+.refresher-icon.rotating {
+  animation: rotate 2s linear infinite;
+}
+
+.refresher-text {
+  font-size: 12px;
+  color: #999;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

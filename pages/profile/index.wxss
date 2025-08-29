@@ -1,0 +1,328 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, #f8f8f8, #ffffff);
+}
+
+/* 自定义导航栏样式 */
+.custom-nav {
+  width: 100%;
+  background: rgb(43, 61, 87);
+  color: #fff;
+}
+
+.nav-content {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.nav-title {
+  font-size: 34rpx;
+  font-weight: 500;
+}
+
+.profile-container {
+  height: 100vh;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.profile-header {
+  padding: 32rpx 32rpx 60rpx;
+  background: linear-gradient(180deg, rgb(43, 61, 87), rgb(66, 80, 79));
+  color: #fff;
+  position: relative;
+
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.user-info {
+  margin-top: 24rpx;
+  display: flex;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.avatar-container {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 15px;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+}
+
+.user-detail {
+  flex: 1;
+}
+
+.nickname {
+  font-size: 36rpx;
+  font-weight: 600;
+  margin-bottom: 8rpx;
+}
+
+.user-id {
+  font-size: 24rpx;
+  opacity: 0.8;
+}
+
+.bio {
+  font-size: 28rpx;
+  margin: 24rpx 0;
+  opacity: 0.9;
+}
+
+.stats {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 32rpx;
+  align-items: center;
+}
+
+.stat-item {
+  margin-right: 48rpx;
+  text-align: center;
+}
+
+.number {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  margin-bottom: 4rpx;
+}
+
+.label {
+  font-size: 24rpx;
+  opacity: 0.8;
+}
+
+.settings-btn {
+  margin-left: auto;
+  background-color: rgb(63, 77, 77);
+  padding: 2rpx 42rpx;
+  /* background: transparent; */
+  border: 2rpx solid #fff;
+  border-radius: 100rpx;
+  font-size: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52rpx;
+}
+
+.btn-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.btn-inner::before {
+  content: "";
+  display: inline-block;
+  width: 26rpx;
+  height: 26rpx;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiPjwvY2lyY2xlPjxwYXRoIGQ9Ik0xOS40IDE1YTEuNjUgMS42NSAwIDAgMCAuMzMgMS44MmwuMDYuMDZhMiAyIDAgMCAxIDAgMi44MyAyIDIgMCAwIDEtMi44MyAwbC0uMDYtLjA2YTEuNjUgMS42NSAwIDAgMC0xLjgyLS4zMyAxLjY1IDEuNjUgMCAwIDAtMSAxLjUxVjIxYTIgMiAwIDAgMS0yIDIgMiAyIDAgMCAxLTItMnYtLjA5QTEuNjUgMS42NSAwIDAgMCA5IDIwLjRhMS42NSAxLjY1IDAgMCAwLTEuODIuMzNsLS4wNi4wNmEyIDIgMCAwIDEtMi44MyAwIDIgMiAwIDAgMSAwLTIuODNsLjA2LS4wNmExLjY1IDEuNjUgMCAwIDAgLjMzLTEuODIgMS42NSAxLjY1IDAgMCAwLTEuNTEtMUgzYTIgMiAwIDAgMS0yLTIgMiAyIDAgMCAxIDItMmguMDlBMS42NSAxLjY1IDAgMCAwIDMuNiA5YTEuNjUgMS42NSAwIDAgMC0uMzMtMS44MmwtLjA2LS4wNmEyIDIgMCAwIDEgMC0yLjgzIDIgMiAwIDAgMSAyLjgzIDBsLjA2LjA2YTEuNjUgMS42NSAwIDAgMCAxLjgyLjMzSDhhMS42NSAxLjY1IDAgMCAwIDEtMS41MVYzYTIgMiAwIDAgMSAyLTIgMiAyIDAgMCAxIDIgMnYuMDlhMS42NSAxLjY1IDAgMCAwIDEgMS41MSAxLjY1IDEuNjUgMCAwIDAgMS44Mi0uMzNsLjA2LS4wNmEyIDIgMCAwIDEgMi44MyAwIDIgMiAwIDAgMSAwIDIuODNsLS4wNi4wNmExLjY1IDEuNjUgMCAwIDAtLjMzIDEuODJWOWExLjY1IDEuNjUgMCAwIDAgMS41MSAxSDIxYTIgMiAwIDAgMSAyIDIgMiAyIDAgMCAxLTIgMmgtLjA5YTEuNjUgMS42NSAwIDAgMC0xLjUxIDFaIj48L3BhdGg+PC9zdmc+");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.btn-inner::after {
+  content: "";
+}
+
+.content-tabs {
+  position: relative;
+  background: #fff;
+  margin: -30rpx 0 0;
+  border-radius: 24rpx 24rpx 0 0;
+  overflow: hidden;
+  box-shadow: none;
+  z-index: 10;
+}
+
+.tab-header {
+  display: flex;
+  padding: 0;
+  background: #fff;
+  position: relative;
+}
+
+.tab-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1rpx;
+  background: #f0f0f0;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 30rpx 0;
+  font-size: 30rpx;
+  color: #666;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.tab-item.active {
+  color: #ff2442;
+  font-weight: 600;
+}
+
+.tab-item::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 4rpx;
+  background: #ff2442;
+  border-radius: 2rpx;
+  transition: width 0.3s;
+  z-index: 1;
+}
+
+.tab-item.active::after {
+  width: 40rpx;
+}
+
+.tab-line {
+  display: none;
+}
+
+.content-area {
+  flex: 1;
+  background: #fff;
+  margin-top: 0;
+  height: 0;
+  overflow-y: auto;
+}
+
+.content-list {
+  min-height: 100%;
+  background: #fff;
+  padding-top: 10rpx;
+  padding-bottom: 40rpx;
+}
+
+
+
+/* 新的瀑布流样式 */
+.waterfall-container {
+  display: flex;
+  padding: 12rpx;
+  gap: 12rpx;
+  box-sizing: border-box;
+  /* background: #f8f8f8; */
+  min-height: auto;
+}
+
+.waterfall-left,
+.waterfall-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.waterfall-item {
+  margin-bottom: 16rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.waterfall-item:active {
+  transform: scale(0.98);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.12);
+}
+
+/* 加载状态样式 */
+.load-status {
+  text-align: center;
+  padding: 30rpx 0;
+  margin-bottom: 40rpx;
+}
+
+.loading-text {
+  color: #999;
+  font-size: 24rpx;
+}
+
+.no-more-text {
+  color: #ccc;
+  font-size: 24rpx;
+}
+
+.empty-tip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  color: #999;
+  font-size: 28rpx;
+}
+
+/* 自定义下拉刷新样式 */
+.custom-refresher {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.refresher-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.refresher-icon {
+  font-size: 20px;
+  color: #666;
+  margin-bottom: 8px;
+  transition: all 0.6s ease;
+}
+
+.refresher-icon.rotating {
+  animation: rotate 2s linear infinite;
+}
+
+.refresher-text {
+  font-size: 12px;
+  color: #999;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

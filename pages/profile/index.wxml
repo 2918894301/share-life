@@ -1,0 +1,87 @@
+<view class="profile-container">
+  <!-- 自定义导航栏 -->
+  <view class="custom-nav" style="height:{{statusBarHeight}}px;"></view>
+  <view style="height:44px; background: rgb(43, 61, 87);"></view>
+  <!-- 顶部背景 -->
+  <view class="profile-header">
+    <!-- 用户信息 -->
+    <view class="user-info">
+      <view class="avatar-container">
+        <image class="avatar" src="{{userInfo.avatar || '/assets/images/default-avatar.png'}}" mode="aspectFill"></image>
+      </view>
+      <view class="user-detail">
+        <view class="nickname">{{userInfo.nickname}}</view>
+        <view class="user-id">享生活号 {{userInfo.userId}}</view>
+      </view>
+    </view>
+    <!-- 个人简介 -->
+    <view class="bio">{{userInfo.bio}}</view>
+    <!-- 数据统计 -->
+    <view class="stats">
+      <view class="stat-item">
+        <text class="number">{{userInfo.stats.following}}</text>
+        <text class="label">关注</text>
+      </view>
+      <view class="stat-item">
+        <text class="number">{{userInfo.stats.followers}}</text>
+        <text class="label">粉丝</text>
+      </view>
+      <view class="stat-item">
+        <text class="number">{{userInfo.stats.likes}}</text>
+        <text class="label">获赞与收藏</text>
+      </view>
+      <view class="settings-btn" bindtap="goToSettings">
+        <view class="btn-inner"></view>
+      </view>
+    </view>
+  </view>
+  <!-- 内容标签页 -->
+  <view class="content-tabs">
+    <view class="tab-header">
+      <view class="tab-item {{currentTab === 0 ? 'active' : ''}}" bindtap="switchTab" data-index="0">
+        笔记
+      </view>
+      <view class="tab-item {{currentTab === 1 ? 'active' : ''}}" bindtap="switchTab" data-index="1">
+        收藏
+      </view>
+      <view class="tab-item {{currentTab === 2 ? 'active' : ''}}" bindtap="switchTab" data-index="2">
+        赞过
+      </view>
+    </view>
+  </view>
+  <!-- 内容区域 -->
+  <scroll-view scroll-y class="content-area" bindscrolltolower="onReachBottom" refresher-enabled="{{true}}" refresher-threshold="{{80}}" refresher-default-style="none" refresher-background="transparent" refresher-triggered="{{isRefreshing}}" bindrefresherrefresh="onPullDownRefresh">
+    <!-- 自定义下拉刷新指示器（所有标签页都显示） -->
+    <view slot="refresher" class="custom-refresher">
+      <view class="refresher-content">
+        <view class="refresher-icon {{isRefreshing ? 'rotating' : ''}}">⟳</view>
+        <text class="refresher-text">{{isRefreshing ? '正在刷新...' : '下拉刷新'}}</text>
+      </view>
+    </view>
+    <!-- 统一的内容列表 -->
+    <view class="content-list">
+      <!-- 瀑布流容器 -->
+      <view class="waterfall-container" wx:if="{{tabs[currentTab].leftList.length > 0 || tabs[currentTab].rightList.length > 0}}">
+        <view class="waterfall-left">
+          <view wx:for="{{tabs[currentTab].leftList}}" wx:key="id" class="waterfall-item">
+            <note-card note="{{item}}" type="{{item.type}}" bindtap="onTapNote" data-note="{{item}}" bind:likeChanged="onLikeChanged" />
+          </view>
+        </view>
+        <view class="waterfall-right">
+          <view wx:for="{{tabs[currentTab].rightList}}" wx:key="id" class="waterfall-item">
+            <note-card note="{{item}}" type="{{item.type}}" bindtap="onTapNote" data-note="{{item}}" bind:likeChanged="onLikeChanged" />
+          </view>
+        </view>
+      </view>
+      <!-- 加载状态 -->
+      <view class="load-status" wx:if="{{tabs[currentTab].list.length > 0}}">
+        <view wx:if="{{tabs[currentTab].page.hasMore}}" class="loading-text">正在加载更多...</view>
+        <view wx:else class="no-more-text">没有更多了</view>
+      </view>
+      <!-- 空状态 -->
+      <view class="empty-tip" wx:if="{{tabs[currentTab].list.length === 0 && !tabs[currentTab].loading}}">
+        {{tabs[currentTab].emptyText}}
+      </view>
+    </view>
+  </scroll-view>
+</view>

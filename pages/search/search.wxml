@@ -1,0 +1,46 @@
+<!-- search.wxml -->
+<view class="search-page">
+  <!-- 搜索框 -->
+  <view class="search-header">
+    <view class="search-box">
+      <view class="search-icon"></view>
+      <input type="text" placeholder="搜索" placeholder-class="search-placeholder" value="{{searchText}}" focus="{{true}}" bindinput="onSearchInput" bindconfirm="onSearch" />
+    </view>
+    <view class="search-btn" bindtap="onSearch">搜索</view>
+  </view>
+  <!-- 搜索推荐 -->
+  <view class="search-recommend" wx:if="{{!searching}}">
+    <view class="recommend-title">猜你想搜</view>
+    <view class="recommend-list">
+      <view class="recommend-item" wx:for="{{recommendList}}" wx:key="index" bindtap="onTapRecommend" data-keyword="{{item}}">
+        {{item}}
+      </view>
+    </view>
+  </view>
+  <!-- 搜索结果 -->
+  <scroll-view class="search-results" scroll-y wx:if="{{searching}}" bindscrolltolower="loadMore" enable-back-to-top enhanced show-scrollbar="{{false}}">
+    <!-- 搜索结果统计 -->
+    <view class="search-stats" wx:if="{{!isLoading && searchResults.length > 0}}">
+      <text class="stats-text">找到 {{total}} 条相关内容</text>
+    </view>
+    <view class="content-list">
+      <!-- 加载中状态 -->
+      <view class="loading-container" wx:if="{{isLoading}}">
+        <view class="loading-icon"></view>
+        <text class="loading-text">搜索中...</text>
+      </view>
+      <!-- 搜索结果列表 -->
+      <view class="card-container" wx:if="{{!isLoading && searchResults.length > 0}}">
+        <view class="card-item" wx:for="{{searchResults}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
+          <note-card note="{{item}}" bind:likeChanged="onLikeChanged"></note-card>
+        </view>
+      </view>
+      <!-- 空状态 -->
+      <view class="empty-state" wx:if="{{!isLoading && searchResults.length === 0}}">
+        <view class="empty-icon">🔍</view>
+        <text class="empty-text">没有找到相关内容</text>
+        <text class="empty-tip">试试其他关键词吧</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "action-bar": "/components/action-bar/action-bar",
+    "follow-button": "/components/follow-button/index",
+    "comment-input": "/components/comment-input/index"
+  }
+}

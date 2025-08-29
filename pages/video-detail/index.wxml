@@ -1,0 +1,128 @@
+<view class="video-detail-container">
+  <!-- 视频播放区域 -->
+  <view class="video-wrapper">
+    <video id="mainVideo" class="main-video" src="{{note.video}}" object-fit="contain" autoplay="{{true}}" show-center-play-btn="{{false}}" controls="{{false}}" loop="{{true}}" bindplay="onVideoPlay" bindpause="onVideoPause" binderror="onVideoError" bindtimeupdate="onTimeUpdate" bindtap="togglePlay"></video>
+    <!-- 暂停图标 -->
+    <view class="pause-icon {{!isPlaying ? 'show' : ''}}" bindtap="togglePlay">
+      <view class="pause-svg"></view>
+    </view>
+  </view>
+  <!-- 左上角返回按钮 -->
+  <view class="back-btn" bindtap="goBack">
+    <view class="back-icon"></view>
+  </view>
+  <!-- 左下角作者信息区域 -->
+  <view class="author-section">
+    <!-- 作者信息行：头像、昵称、关注按钮 -->
+    <view class="author-info-row">
+      <!-- 作者头像 -->
+      <view class="author-avatar" bindtap="goToAuthorProfile">
+        <image class="avatar-image" src="{{note.author.avatar}}" mode="aspectFill" />
+      </view>
+      <!-- 作者昵称 -->
+      <view class="author-name">{{note.author.nickname || '小番薯'}}</view>
+      <!-- 关注按钮 -->
+      <follow-button isFollowing="{{isFollowing}}" userId="{{note.author.id}}" bind:followChange="handleFollowChange" />
+    </view>
+    <!-- 内容描述 -->
+    <view class="content-text">
+      <text class="title-content">{{note.title+' '+note.content || ''}}</text>
+    </view>
+  </view>
+  <!-- 右下角操作按钮 -->
+  <view class="action-buttons">
+    <!-- 点赞 -->
+    <view class="action-item" bindtap="handleLike">
+      <view class="action-icon like-icon {{isLiked ? 'liked' : ''}}"></view>
+      <text class="action-count">{{note.likeCount > 0 ? note.likeCount : '点赞'}}</text>
+    </view>
+    <!-- 评论 -->
+    <view class="action-item" bindtap="handleComment">
+      <view class="action-icon comment-icon"></view>
+      <text class="action-count">{{note.commentCount > 0 ? note.commentCount : '抢首评'}}</text>
+    </view>
+    <!-- 收藏 -->
+    <view class="action-item" bindtap="handleFavorite">
+      <view class="action-icon favorite-icon {{isFavorited ? 'favorited' : ''}}"></view>
+      <text class="action-count">{{note.favoriteCount > 0 ? note.favoriteCount : '收藏'}}</text>
+    </view>
+    <!-- 分享 -->
+    <view class="action-item" bindtap="handleShare">
+      <view class="action-icon share-icon"></view>
+      <text class="action-count">分享</text>
+    </view>
+  </view>
+  <!-- 底部评论输入框组件 -->
+  <comment-input show="{{showCommentInput}}" noteId="{{note.id}}" replyToId="{{replyToId}}" replyToNickname="{{replyToNickname}}" placeholder="{{replyToId ? '回复评论...' : '说点什么...'}}" theme="dark" bind:success="onCommentSuccess" bind:error="onCommentError" bind:cancelReply="onCancelReply" bind:hide="onCommentInputHide" />
+  <!-- 评论弹出层 -->
+  <view class="comment-popup {{showComment ? 'show' : ''}}">
+    <view class="comment-mask" bindtap="hideComment"></view>
+    <view class="comment-container">
+      <view class="comment-header">
+        <text class="comment-title">共 {{note.commentCount || 0}} 条评论</text>
+        <view class="close-btn" bindtap="hideComment">×</view>
+      </view>
+      <scroll-view scroll-y class="comment-list" bindscrolltolower="loadMoreComments" lower-threshold="50">
+        <!-- 一级评论 -->
+        <view class="comment-item" wx:for="{{comments}}" wx:key="id">
+          <view class="comment-user">
+            <view class="user-avatar">
+              <image class="avatar-img" src="{{item.userInfo.avatar}}" mode="aspectFill" />
+            </view>
+          </view>
+          <view class="comment-content-wrapper">
+            <!-- 昵称在头像右边偏上一点 -->
+            <view class="user-name">{{item.userInfo.nickname}}</view>
+            <!-- 一级评论内容 -->
+            <view class="comment-content">
+              <view class="main-content">
+                <text>{{item.content}}</text>
+                <!-- 时间在内容后面 -->
+                <text class="comment-time">{{item.createTime}}</text>
+              </view>
+            </view>
+            <!-- 点赞数 -->
+            <view class="comment-actions">
+              <view class="comment-like" wx:if="{{item.likeCount > 0}}">
+                <text class="like-count">{{item.likeCount}}赞</text>
+              </view>
+            </view>
+            <!-- 二级评论列表 -->
+            <view class="replies-list" wx:if="{{item.replies && item.replies.length > 0}}">
+              <view class="reply-item" wx:for="{{item.replies}}" wx:for-item="reply" wx:key="id">
+                <view class="reply-user">
+                  <view class="reply-avatar">
+                    <image class="avatar-img" src="{{reply.userInfo.avatar}}" mode="aspectFill" />
+                  </view>
+                </view>
+                <view class="reply-content-wrapper">
+                  <view class="reply-user-name">{{reply.userInfo.nickname}}</view>
+                  <view class="reply-content">
+                    <view class="reply-main-content">
+                      <text>{{reply.content}}</text>
+                      <text class="reply-time">{{reply.createTime}}</text>
+                    </view>
+                  </view>
+                  <view class="reply-actions">
+                    <view class="reply-like" wx:if="{{reply.likeCount > 0}}">
+                      <text class="reply-like-count">{{reply.likeCount}}赞</text>
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <!-- 加载状态提示 -->
+        <view class="loading-tips" wx:if="{{comments.length > 0}}">
+          <view wx:if="{{isLoading && hasMore}}" class="loading">加载中...</view>
+          <view wx:if="{{!hasMore}}" class="no-more">没有更多评论了</view>
+        </view>
+        <!-- 无评论提示 -->
+        <view class="empty-tips" wx:if="{{comments.length === 0 && !isLoading}}">暂无评论，快来抢沙发吧~</view>
+      </scroll-view>
+      <!-- 评论弹出层中的评论输入框 - 白色主题 -->
+      <comment-input show="{{true}}" noteId="{{note.id}}" replyToId="{{replyToId}}" replyToNickname="{{replyToNickname}}" placeholder="{{replyToId ? '回复评论...' : '说点什么...'}}" theme="light" bind:success="onCommentSuccess" bind:error="onCommentError" bind:cancelReply="onCancelReply" />
+    </view>
+  </view>
+</view>

@@ -1,0 +1,619 @@
+/* pages/video-detail/index.wxss */
+
+/* 全局样式重置 */
+page {
+  background: #000;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* 容器 */
+.video-detail-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  overflow: hidden;
+}
+
+/* 视频播放区域 */
+.video-wrapper {
+  position: relative;
+  width: 100vw;
+  height: calc(100vh - 190rpx);
+  min-height: 400rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.main-video {
+  width: 100vw;
+  height: calc(100vh - 190rpx);
+  min-height: 400rpx;
+  background: #000;
+}
+
+/* 左上角返回按钮 */
+.back-btn {
+  position: fixed;
+  top: 90rpx;
+  left: 30rpx;
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.back-icon {
+  width: 64rpx;
+  height: 64rpx;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-icon::before {
+  content: "";
+  width: 32rpx;
+  height: 32rpx;
+  background: #fff;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M379.637656 519.019961 803.31583 95.343834c19.469684-19.468661 19.896297-50.606243 0.957576-69.542917l-11.869438-11.874553c-18.94179-18.935652-50.077325-18.508016-69.544964 0.957576L253.75941 483.984555c-1.300298 1.300298-2.508521 2.656864-3.640016 4.053328-7.597177 9.09697-11.342567 20.315748-11.237193 31.510995-0.021484 12.38301 4.598614 24.658599 13.919632 33.979617l11.870461 11.871484c1.270629 1.269606 2.599573 2.446115 3.971484 3.541803l440.803025 440.803025c18.938721 18.936675 49.644575 18.936675 68.587388 0l11.869438-11.872507c18.939744-18.937698 18.939744-49.646621 0-68.586365L379.637656 519.019961z' fill='%23ffffff'/%3E%3C/svg%3E")
+    no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M379.637656 519.019961 803.31583 95.343834c19.469684-19.468661 19.896297-50.606243 0.957576-69.542917l-11.869438-11.874553c-18.94179-18.935652-50.077325-18.508016-69.544964 0.957576L253.75941 483.984555c-1.300298 1.300298-2.508521 2.656864-3.640016 4.053328-7.597177 9.09697-11.342567 20.315748-11.237193 31.510995-0.021484 12.38301 4.598614 24.658599 13.919632 33.979617l11.870461 11.871484c1.270629 1.269606 2.599573 2.446115 3.971484 3.541803l440.803025 440.803025c18.938721 18.936675 49.644575 18.936675 68.587388 0l11.869438-11.872507c18.939744-18.937698 18.939744-49.646621 0-68.586365L379.637656 519.019961z' fill='%23ffffff'/%3E%3C/svg%3E")
+    no-repeat;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+}
+
+/* 暂停图标样式 */
+.pause-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120rpx;
+  height: 120rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.pause-icon.show {
+  opacity: 1;
+}
+
+.pause-svg {
+  width: 120rpx;
+  height: 120rpx;
+  background: rgba(255, 255, 255, 0.8);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M874.8 560.8l-657.6 450.6c-39.7 27.2-93.8-1-93.8-48.8V61.4c0-47.8 54.2-76 93.8-48.8l657.6 450.6c34.5 23.6 34.5 74 0 97.6z'/%3E%3C/svg%3E")
+    no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M874.8 560.8l-657.6 450.6c-39.7 27.2-93.8-1-93.8-48.8V61.4c0-47.8 54.2-76 93.8-48.8l657.6 450.6c34.5 23.6 34.5 74 0 97.6z'/%3E%3C/svg%3E")
+    no-repeat;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+}
+
+/* 左下角作者信息区域 */
+.author-section {
+  position: fixed;
+  bottom: 190rpx;
+  left: 30rpx;
+  z-index: 100;
+}
+
+/* 作者信息行 */
+.author-info-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+  max-width: 500rpx;
+}
+
+/* 作者头像 */
+.author-avatar {
+  width: 96rpx;
+  height: 96rpx;
+  margin-right: 20rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4rpx solid rgba(255, 255, 255, 0.8);
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.author-avatar:active {
+  transform: scale(0.95);
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+/* 作者昵称 */
+.author-name {
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: bold;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.3);
+  margin-right: 20rpx;
+}
+
+/* 内容描述 */
+.content-text {
+  /* 内容描述紧接在作者信息行下方 */
+}
+
+.title-content {
+  color: #fff;
+  font-size: 26rpx;
+  line-height: 1.4;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.3);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 500rpx;
+}
+
+/* 右下角操作按钮 */
+.action-buttons {
+  position: fixed;
+  bottom: 150rpx;
+  right: 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 100;
+}
+
+.action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 60rpx;
+  cursor: pointer;
+  background: transparent;
+  padding: 0;
+  margin: 0 0 60rpx 0;
+  border: none;
+  line-height: normal;
+}
+
+.action-item::after {
+  border: none;
+}
+
+.action-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.action-icon:active {
+  transform: scale(0.9);
+}
+
+.action-count {
+  color: #fff;
+  font-size: 22rpx;
+  text-align: center;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.3);
+  min-width: 80rpx;
+}
+
+/* 点赞图标 - 使用 action-bar 的样式，设置为白色 */
+.like-icon {
+  width: 60rpx;
+  height: 60rpx;
+  background: #fff;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'%3E%3C/path%3E%3C/svg%3E")
+    no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'%3E%3C/path%3E%3C/svg%3E")
+    no-repeat;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  transition: all 0.3s ease;
+}
+
+.like-icon.liked {
+  background: #ff2442;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='currentColor' d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/%3E%3C/svg%3E")
+    no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='currentColor' d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/%3E%3C/svg%3E")
+    no-repeat;
+  animation: pop 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+/* 评论图标 - 使用 action-bar 的样式，设置为白色 */
+.comment-icon {
+  width: 60rpx;
+  height: 60rpx;
+  background: #fff;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z'%3E%3C/path%3E%3C/svg%3E")
+    no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z'%3E%3C/path%3E%3C/svg%3E")
+    no-repeat;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  transition: all 0.3s ease;
+}
+
+/* 收藏图标 - 使用 action-bar 的样式，设置为白色 */
+.favorite-icon {
+  width: 60rpx;
+  height: 60rpx;
+  background: #fff;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' stroke='currentColor' stroke-width='2' fill='none'/%3E%3C/svg%3E")
+    no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' stroke='currentColor' stroke-width='2' fill='none'/%3E%3C/svg%3E")
+    no-repeat;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  transition: all 0.3s ease;
+}
+
+.favorite-icon.favorited {
+  background: #ffd700;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' stroke='currentColor' stroke-width='1.5' fill='currentColor'/%3E%3C/svg%3E")
+    no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' stroke='currentColor' stroke-width='1.5' fill='currentColor'/%3E%3C/svg%3E")
+    no-repeat;
+}
+
+/* 分享图标 - 使用 action-bar 的样式，设置为白色 */
+.share-icon {
+  width: 60rpx;
+  height: 60rpx;
+  background: #fff;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M16 8C17.6569 8 19 6.65685 19 5C19 3.34315 17.6569 2 16 2C14.3431 2 13 3.34315 13 5C13 5.12548 13.0077 5.24917 13.0227 5.37061L8.08261 7.84064C7.54305 7.32015 6.81884 7 6 7C4.34315 7 3 8.34315 3 10C3 11.6569 4.34315 13 6 13C6.81884 13 7.54305 12.6799 8.08261 12.1594L13.0227 14.6294C13.0077 14.7508 13 14.8745 13 15C13 16.6569 14.3431 18 16 18C17.6569 18 19 16.6569 19 15C19 13.3431 17.6569 12 16 12C15.1812 12 14.457 12.3201 13.9174 12.8406L8.97733 10.3706C8.99229 10.2492 9 10.1255 9 10C9 9.87452 8.99229 9.75083 8.97733 9.62939L13.9174 7.15936C14.457 7.67985 15.1812 8 16 8Z' fill='currentColor'/%3E%3C/svg%3E")
+    no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M16 8C17.6569 8 19 6.65685 19 5C19 3.34315 17.6569 2 16 2C14.3431 2 13 3.34315 13 5C13 5.12548 13.0077 5.24917 13.0227 5.37061L8.08261 7.84064C7.54305 7.32015 6.81884 7 6 7C4.34315 7 3 8.34315 3 10C3 11.6569 4.34315 13 6 13C6.81884 13 7.54305 12.6799 8.08261 12.1594L13.0227 14.6294C13.0077 14.7508 13 14.8745 13 15C13 16.6569 14.3431 18 16 18C17.6569 18 19 16.6569 19 15C19 13.3431 17.6569 12 16 12C15.1812 12 14.457 12.3201 13.9174 12.8406L8.97733 10.3706C8.99229 10.2492 9 10.1255 9 10C9 9.87452 8.99229 9.75083 8.97733 9.62939L13.9174 7.15936C14.457 7.67985 15.1812 8 16 8Z' fill='currentColor'/%3E%3C/svg%3E")
+    no-repeat;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  transition: all 0.3s ease;
+}
+
+/* 添加点击动画效果 */
+.action-item:active .like-icon:not(.liked),
+.action-item:active .comment-icon,
+.action-item:active .share-icon {
+  transform: scale(0.9);
+}
+
+.action-item:active .favorite-icon:not(.favorited) {
+  background: rgba(255, 215, 0, 0.8);
+}
+
+/* 弹出动画 - 只用于点赞 */
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 评论弹出层 */
+.comment-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.comment-popup.show {
+  transform: translateY(0);
+}
+
+.comment-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.comment-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 65vh;
+  background: #fff;
+  border-radius: 20rpx 20rpx 0 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx 30rpx 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.comment-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.close-btn {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  color: #999;
+  border-radius: 50%;
+  background: #f5f5f5;
+}
+
+.comment-list {
+  flex: 1;
+  padding: 0 30rpx 150rpx 30rpx; /* 增加底部内边距，为评论输入框留出空间 */
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.comment-item {
+  display: flex;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #f8f8f8;
+}
+
+.comment-item:last-child {
+  border-bottom: none;
+}
+
+.comment-user {
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.user-avatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.comment-content-wrapper {
+  flex: 1;
+}
+
+.user-name {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+  margin-top: -4rpx; /* 让昵称在头像右边偏上一点 */
+}
+
+.comment-time {
+  font-size: 22rpx;
+  color: #999;
+  margin-left: 12rpx;
+}
+
+.reply-content {
+  padding: 12rpx 16rpx;
+  border-radius: 8rpx;
+  margin-bottom: 12rpx;
+  margin-left: 20rpx; /* 二级评论向右缩进 */
+  border-left: 3rpx solid #ddd; /* 添加左边框表示层级 */
+}
+
+.reply-author {
+  color: #007aff;
+  font-size: 24rpx;
+}
+
+.reply-text {
+  color: #666;
+  font-size: 24rpx;
+}
+
+.comment-content {
+  margin-bottom: 8rpx;
+}
+
+.main-content {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.5;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.comment-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.comment-like {
+  display: flex;
+  align-items: center;
+}
+
+.like-count {
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* 加载状态 */
+.loading-tips {
+  text-align: center;
+  padding: 40rpx 0;
+}
+
+.loading,
+.no-more {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.empty-tips {
+  text-align: center;
+  padding: 100rpx 0;
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 评论输入区域 */
+.comment-input-area {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 30rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  border-top: 1rpx solid #f0f0f0;
+  background: #fff;
+}
+
+.comment-input {
+  flex: 1;
+  background: #f8f8f8;
+  border-radius: 40rpx;
+  padding: 20rpx 30rpx;
+  font-size: 28rpx;
+  margin-right: 20rpx;
+  border: none;
+  outline: none;
+}
+
+.send-btn {
+  padding: 20rpx 30rpx;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  background: #f0f0f0;
+  color: #999;
+  transition: all 0.3s ease;
+}
+
+.send-btn.active {
+  background: #ff2442;
+  color: #fff;
+}
+
+/* 二级评论样式 */
+.replies-list {
+  margin-top: 16rpx;
+  margin-left: 20rpx;
+  padding-left: 20rpx;
+  border-left: 2rpx solid #f0f0f0;
+}
+
+.reply-item {
+  display: flex;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f8f8f8;
+}
+
+.reply-item:last-child {
+  border-bottom: none;
+}
+
+.reply-user {
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+
+.reply-avatar {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+}
+
+.reply-content-wrapper {
+  flex: 1;
+}
+
+.reply-user-name {
+  font-size: 24rpx;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 6rpx;
+  margin-top: -2rpx;
+}
+
+.reply-content {
+  margin-bottom: 6rpx;
+}
+
+.reply-main-content {
+  font-size: 26rpx;
+  color: #333;
+  line-height: 1.5;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.reply-time {
+  font-size: 20rpx;
+  color: #999;
+  margin-left: 10rpx;
+}
+
+.reply-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 6rpx;
+}
+
+.reply-like {
+  font-size: 20rpx;
+  color: #999;
+}
+
+.reply-like-count {
+  margin-left: 4rpx;
+}
