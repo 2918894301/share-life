@@ -7,7 +7,6 @@
   background: linear-gradient(to bottom, #f8f8f8, #ffffff);
 }
 
-/* 自定义导航栏样式 */
 .custom-nav {
   width: 100%;
   background: rgb(43, 61, 87);
@@ -226,15 +225,11 @@
   padding-bottom: 40rpx;
 }
 
-
-
-/* 新的瀑布流样式 */
 .waterfall-container {
   display: flex;
   padding: 12rpx;
   gap: 12rpx;
   box-sizing: border-box;
-  /* background: #f8f8f8; */
   min-height: auto;
 }
 
@@ -259,7 +254,6 @@
   box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.12);
 }
 
-/* 加载状态样式 */
 .load-status {
   text-align: center;
   padding: 30rpx 0;
@@ -285,7 +279,6 @@
   font-size: 28rpx;
 }
 
-/* 自定义下拉刷新样式 */
 .custom-refresher {
   width: 100%;
   height: 80px;

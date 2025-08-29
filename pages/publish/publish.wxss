@@ -5,7 +5,7 @@
   background: #f8f8f8;
 }
 
-/* 导航栏样式 */
+
 .nav-bar {
   height: 88rpx;
   background: #fff;
@@ -20,13 +20,12 @@
   font-weight: 500;
 }
 
-/* 内容区域样式 */
+
 .content-area {
   flex: 1;
   overflow: hidden;
 }
 
-/* 媒体上传区域样式 */
 .media-upload {
   padding: 20rpx;
   background: #fff;
@@ -135,7 +134,6 @@
   color: #999;
 }
 
-/* 标题输入区域样式 */
 .title-area {
   margin-top: 20rpx;
   padding: 20rpx;
@@ -159,7 +157,6 @@
   margin-top: 10rpx;
 }
 
-/* 文本输入区域样式 */
 .text-area {
   padding: 20rpx;
   background: #fff;
@@ -177,7 +174,6 @@ textarea {
   margin-top: 10rpx;
 }
 
-/* 分类选择样式 */
 .category-section {
   margin-top: 20rpx;
   padding: 20rpx;
@@ -209,7 +205,6 @@ textarea {
   color: #fff;
 }
 
-/* 位置信息样式 */
 .location-section {
   margin-top: 20rpx;
   padding: 20rpx;
@@ -228,7 +223,6 @@ textarea {
   color: #999;
 }
 
-/* 底部按钮区域样式 */
 .bottom-bar {
   height: 100rpx;
   background: #fff;
@@ -261,7 +255,7 @@ textarea {
   background: #ff4444;
 }
 
-/* 上传进度弹窗样式 */
+
 .upload-modal {
   position: fixed;
   top: 0;

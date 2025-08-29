@@ -140,7 +140,6 @@ const uploadFile = (url, filePath, name = 'file', formData = {}, opts = {}) => {
     const token = wx.getStorageSync('token');
     if (token) {
       finalHeader['Authorization'] = `Bearer ${token}`;
-      // 也保留原有的token字段以兼容不同的后端实现
       finalHeader['token'] = token;
     }
   }

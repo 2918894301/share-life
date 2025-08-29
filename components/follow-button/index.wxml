@@ -1,7 +1,5 @@
-<!-- 
-  关注按钮组件模板 - 简洁的关注/取消关注按钮
-  根据关注状态显示不同的样式和文字
--->
+<!-- 关注按钮组件模板 - 简洁的关注/取消关注按钮
+  根据关注状态显示不同的样式和文字 -->
 <view class="follow-btn {{isFollowing ? 'following' : ''}}" bindtap="toggleFollow">
   {{isFollowing ? '已关注' : '关注'}}
 </view>

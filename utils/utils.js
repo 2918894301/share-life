@@ -20,7 +20,6 @@ function formatCommentTime(dateString) {
   return commentYear === currentYear ? `${month}-${day}` : `${commentYear}-${month}-${day}`;
 }
 
-// 导出函数供其他文件使用
 module.exports = {
   formatCommentTime
 };

@@ -1,6 +1,5 @@
 <!-- 操作栏组件模板 - 笔记详情页底部交互栏
-  功能按钮：分享、点赞、收藏、评论
-  支持暗黑模式和状态切换动画 -->
+  功能按钮：分享、点赞、收藏、评论 -->
 <view class="action-bar ">
   <!-- 分享按钮 - 使用微信原生分享功能 -->
   <button class="action-item share-button" open-type="share" bindtap="onShare">
@@ -9,30 +8,22 @@
     </view>
     <text class="text">分享</text>
   </button>
-  <!-- 点赞按钮 - 显示点赞状态和数量 -->
   <view class="action-item" bindtap="onLike">
     <view class="icon-wrapper">
-      <!-- 点赞图标，根据状态切换样式 -->
       <view class="icon icon-like {{isLiked ? 'active' : ''}}"></view>
     </view>
-    <!-- 点赞数量显示 -->
     <text class="text">{{likeCount}}</text>
   </view>
-  <!-- 收藏按钮 - 显示收藏状态和数量 -->
-  <view class="action-item" bindtap="onFavorite">
+  <view class="action-item" bindtap="onCollect">
     <view class="icon-wrapper">
-      <!-- 收藏图标，根据状态切换样式 -->
-      <view class="icon icon-favorite {{isFavorited ? 'active' : ''}}"></view>
+      <view class="icon icon-collect {{isCollected ? 'active' : ''}}"></view>
     </view>
-    <!-- 收藏数量显示 -->
-    <text class="text">{{favoriteCount}}</text>
+    <text class="text">{{collectCount}}</text>
   </view>
-  <!-- 评论按钮 - 显示评论数量 -->
   <view class="action-item" bindtap="onComment">
     <view class="icon-wrapper">
       <view class="icon icon-comment"></view>
     </view>
-    <!-- 评论数量显示 -->
     <text class="text">{{commentCount}}</text>
   </view>
 </view>

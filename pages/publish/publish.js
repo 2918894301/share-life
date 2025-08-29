@@ -1,5 +1,5 @@
 /**
- * 发布页面 - 类似小红书的内容发布功能
+ * 发布页面
  * 功能：
  * - 支持图文和视频两种笔记类型
  * - 图片选择和预览（最多5张）
@@ -9,67 +9,53 @@
  * - 表单验证和发布状态管理
  */
 
-// 引入封装的请求模块
 const { get, post, uploadFile } = require('../../utils/request');
 Page({
-  /**
-   * 页面数据定义
-   */
+
   data: {
-    // 媒体文件
+
     images: [],              // 选择的图片列表（最多5张）
     videos: [],              // 选择的视频列表（最多1个）
-    // 笔记内容
-    title: '',               // 笔记标题
-    content: '',             // 笔记内容描述
+    title: '',               
+    content: '',             
     
     // 发布设置
-    categories: [],          // 可选的分类列表
-    selectedCategory: '',    // 选中的分类ID
-    location: null,          // 选择的地理位置信息
+    categories: [],         
+    selectedCategory: '',    
+    location: null,          
     
-    // 状态控制
-    canPublish: false,       // 是否满足发布条件
-    
-    // 上传状态
-    uploadingVideo: false,   // 是否正在上传视频
-    
+    canPublish: false,       
+    uploadingVideo: false,  
   },
 
-  /**
-   * 页面加载完成
-   */
+
   onLoad() {
-    this.loadCategories();   // 加载可用的分类数据
+    this.loadCategories();   
   },
 
   /**
    * 加载分类数据
-   * 从服务器获取所有可用的笔记分类，失败时使用默认分类
    */
   async loadCategories() {
     try {
-      // 请求分类数据（无需登录鉴权）
       const res = await get('/categories', {}, { auth: false });
       
       if (res && res.status && res.data) {
-        // 确保返回的数据是数组格式
         const categories = Array.isArray(res.data) ? res.data : [];
         this.setData({ categories });
   
       } else {
         console.error('分类数据格式错误:', res);
-        this.setDefaultCategories();  // 使用默认分类
+        this.setDefaultCategories();  
       }
     } catch (error) {
       console.error('获取分类失败:', error);
-      this.setDefaultCategories();    // 使用默认分类
+      this.setDefaultCategories();   
     }
   },
 
   /**
    * 设置默认分类数据
-   * 当服务器分类数据获取失败时的兜底方案
    */
   setDefaultCategories() {
     this.setData({
@@ -85,7 +71,6 @@ Page({
 
   //选择媒体文件（图片或视频）
   chooseMedia() {
-    // 规则1：如果已经有视频，不允许再选择任何媒体
     if (this.data.videos.length > 0) {
       wx.showToast({
         title: '已上传视频，无法添加更多文件',
@@ -94,7 +79,6 @@ Page({
       return;
     }
 
-    // 规则2：如果已经有图片，只允许继续选择图片
     if (this.data.images.length > 0) {
       if (this.data.images.length >= 5) {
         wx.showToast({
@@ -108,15 +92,13 @@ Page({
       this.selectImages(5 - this.data.images.length);
       return;
     }
-
-    // 规则3：没有任何文件时，显示选择菜单
     wx.showActionSheet({
       itemList: ['选择图片', '选择视频'],
       success: (res) => {
         if (res.tapIndex === 0) {
-          this.selectImages(5);     // 选择图片，最多5张
+          this.selectImages(5);    
         } else {
-          this.selectVideo();       // 选择视频，只能1个
+          this.selectVideo();       
         }
       }
     });
@@ -166,7 +148,6 @@ Page({
       const validFiles = [];
       
       for (const file of tempFiles) {
-        // 检查文件大小，限制10MB
         if (file.size > 10 * 1024 * 1024) {
           wx.showToast({
             title: `图片大小不能超过10MB`,
@@ -214,7 +195,7 @@ Page({
     wx.showLoading({ title: '处理中...' });
 
     try {
-      const file = tempFiles[0]; // 只处理第一个视频文件
+      const file = tempFiles[0]; 
       
       // 检查文件大小，限制50MB
       if (file.size > 100 * 1024 * 1024) {
@@ -232,8 +213,6 @@ Page({
         width: file.width || 0,
         height: file.height || 0
       };
-
-      // 清空图片，设置视频
       this.setData({ 
         images: [],
         videos: [videoData]
@@ -309,7 +288,6 @@ Page({
   },
   chooseLocation() {
     const that = this;
-    
     // 统一的错误处理函数
     const handleLocationError = (errMsg = '获取位置失败') => {
       console.error(errMsg);
@@ -391,7 +369,6 @@ Page({
 
     const { images, videos } = this.data;
     
-    // 检查登录状态
     const token = wx.getStorageSync('token');
     if (!token) {
       wx.showToast({
@@ -408,10 +385,8 @@ Page({
     try {
       let result;
       if (videos.length > 0) {
-        // 上传视频笔记
         result = await this.uploadVideoNote();
       } else if (images.length > 0) {
-        // 上传图片笔记
         result = await this.uploadImageNote();
       } else {
         wx.hideLoading();
@@ -427,8 +402,6 @@ Page({
           title: '发布成功',
           icon: 'success'
         });
-        
-        // 清空页面数据
         this.clearPageData();
         
         setTimeout(() => {
@@ -436,10 +409,8 @@ Page({
           wx.switchTab({
             url: '/pages/index/index',
             success: () => {
-              // 发布成功后，自动刷新首页数据以显示新发布的笔记
               // 获取当前所有页面栈
               const pages = getCurrentPages();
-              // 查找首页实例（通过路由匹配）
               const indexPage = pages.find(page => page.route === 'pages/index/index');
               // 如果找到首页且存在下拉刷新方法，则调用刷新
               if (indexPage && indexPage.onPullDownRefresh) {
@@ -461,21 +432,18 @@ Page({
     }
   },
 
-  // 上传图片笔记
   async uploadImageNote() {
     const { title, content, selectedCategory, location, images } = this.data;
     
     try {
       if (images.length === 0) throw new Error('没有可上传的图片');
       
-      // 第一步：逐个上传图片获取URL
       const imageUrls = [];
       const totalImages = images.length;
       
       for (let i = 0; i < images.length; i++) {
         const image = images[i];
         
-        // 更新进度显示
         wx.showLoading({ 
           title: `上传图片 ${i + 1}/${totalImages}...`,
           mask: true 
@@ -484,7 +452,7 @@ Page({
           // 使用单张图片上传接口
           const uploadResult = await uploadFile('/note/upload-single-image', image.tempFilePath, 'image', {}, {
             auth: true,
-            loading: false, // 使用外层的loading显示
+            loading: false, 
             toast: false
           });
   
@@ -492,7 +460,6 @@ Page({
             imageUrls.push(uploadResult.data.imageUrl);
   
           } else if (uploadResult && uploadResult.imageUrl) {
-            // 兼容直接返回imageUrl的情况
             imageUrls.push(uploadResult.imageUrl);
   
           } else {
@@ -509,13 +476,11 @@ Page({
       if (imageUrls.length === 0) {
         throw new Error('没有成功上传的图片');
       }
-      // 更新进度显示
       wx.showLoading({ 
         title: '创建笔记中...',
         mask: true 
       });
       
-      // 第二步：创建图片笔记
       const noteData = {
         title: title,
         content: content || '',
@@ -523,10 +488,9 @@ Page({
         locationName: location ? location.name : '',
         imageUrls: imageUrls
       };
-      
       const createResult = await post('/note/create-image-note', noteData, {
         auth: true,
-        loading: false, // 使用外层的loading显示
+        loading: false, 
         toast: false
       });
       return createResult;
@@ -535,30 +499,22 @@ Page({
       throw error;
     }
   },
-  // 上传视频笔记 - 直接上传到服务端
+
   async uploadVideoNote() {
     const { title, content, selectedCategory, location, videos } = this.data;
-    // 验证必填字段
     if (!title || !title.trim()) {
       throw new Error('请输入笔记标题');
     }
-    
     if (!videos || videos.length === 0) {
       throw new Error('请先选择视频');
     }
-    
     const videoFile = videos[0];
-    
-    // 确保 filePath 是字符串
     const filePath = videoFile.tempFilePath;
-    
     try {
-
-      // 直接上传到服务端
       const uploadResult = await uploadFile(
         '/note/upload-video',
         filePath,
-        'video', // 后端接收的字段名
+        'video', 
         {
           title: title.trim(),
           content: content || '',
@@ -583,7 +539,6 @@ Page({
     }
   },
 
-  // 清空页面数据
   clearPageData() {
     this.setData({
       images: [],

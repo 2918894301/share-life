@@ -3,47 +3,37 @@
 const { post } = require('../../utils/request');
 
 Component({
-  /**
-   * 组件属性定义
-   */
+
   properties: {
-    // 是否显示评论输入框
     show: {
       type: Boolean,
       value: false
     },
-    
-    // 笔记ID 
     noteId: {
       type: String,
       value: ''
     },
     
-    // 回复的评论ID（可选）- 用于回复特定评论
     replyToId: {
       type: String,
       value: ''
     },
     
-    // 回复的用户昵称
     replyToNickname: {
       type: String,
       value: ''
     },
     
-    // 占位符文本 
     placeholder: {
       type: String,
       value: '说点什么...'
     },
     
-    // 主题模式：
     theme: {
       type: String,
       value: 'light'
     },
     
-    // 是否有底部操作栏（action-bar），如果有则需要调整位置避免重叠
     hasActionBar: {
       type: Boolean,
       value: false
@@ -54,8 +44,8 @@ Component({
    * 组件内部数据
    */
   data: {
-    commentText: '',    // 输入的评论内容
-    isSubmitting: false // 是否正在提交
+    commentText: '',    
+    isSubmitting: false 
   },
 
   /**
@@ -110,7 +100,6 @@ Component({
       // 防重复提交
       if (isSubmitting) return;
 
-      // 验证必要参数
       if (!noteId) {
         wx.showToast({
           title: '笔记ID不能为空',
@@ -122,18 +111,15 @@ Component({
       this.setData({ isSubmitting: true });
 
       try {
-        // 构建请求数据
         const requestData = {
           noteId: noteId,
           content: commentText.trim()
         };
 
-        // 如果是回复评论，添加回复ID
         if (replyToId) {
           requestData.replyToId = replyToId;
         }
 
-        // 发送请求到后端，使用标准的请求配置
         const res = await post('/comments/create', requestData, { 
           auth: true, 
           loading: true,
@@ -141,10 +127,7 @@ Component({
         });
 
         if (res.status && res.data) {
-          // 发送成功，清空输入框
           this.setData({ commentText: '' });
-          
-          // 通知父组件评论发送成功
           this.triggerEvent('success', {
             comment: res.data,
             isReply: !!replyToId
@@ -178,7 +161,5 @@ Component({
     onCancelReply() {
       this.triggerEvent('cancelReply');
     },
-
-
   }
 });

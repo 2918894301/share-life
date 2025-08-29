@@ -2,51 +2,26 @@
 <view class="comment-input-wrapper {{show ? 'show' : ''}} {{theme === 'dark' ? 'dark-theme' : ''}} {{hasActionBar ? 'with-action-bar' : ''}}" wx:if="{{show}}">
   <!-- 安全区域适配 -->
   <view class="comment-input-container">
-    <!-- 回复提示 -->
     <view class="reply-hint" wx:if="{{replyToId && replyToNickname}}">
       <text class="reply-text">回复 @{{replyToNickname}}</text>
       <view class="cancel-reply" bindtap="onCancelReply">×</view>
     </view>
-    
-    <!-- 输入框区域 - 统一的长条形设计 -->
     <view class="unified-input-wrapper">
-      <input 
-        class="comment-input"
-        type="text"
-        placeholder="{{placeholder}}"
-        value="{{commentText}}"
-        bindinput="onInput"
-        bindfocus="onFocus"
-        bindblur="onBlur"
-        confirm-type="send"
-        bindconfirm="onSendTap"
-        maxlength="500"
-      />
-      
-      <!-- 功能按钮组 -->
+      <input class="comment-input" type="text" placeholder="{{placeholder}}" value="{{commentText}}" bindinput="onInput" bindfocus="onFocus" bindblur="onBlur" confirm-type="send" bindconfirm="onSendTap" maxlength="500" />
       <view class="action-buttons-group">
-        <!-- 表情按钮 -->
         <view class="action-btn emoji-btn" bindtap="onEmojiTap">
           <view class="emoji-icon"></view>
         </view>
-        
-        <!-- @按钮 -->
         <view class="action-btn mention-btn" bindtap="onMentionTap">
           <view class="mention-icon">@</view>
         </view>
-        
-        <!-- 发送按钮 -->
-        <view 
-          class="send-btn {{commentText.length > 0 ? 'active' : ''}}"
-          bindtap="onSendTap"
-        >
+        <view class="send-btn {{commentText.length > 0 ? 'active' : ''}}" bindtap="onSendTap">
           <text wx:if="{{!isSubmitting}}">发送</text>
           <text wx:else>发送中...</text>
         </view>
       </view>
     </view>
   </view>
-  
   <!-- 安全区域底部padding -->
   <view class="safe-area-bottom"></view>
 </view>

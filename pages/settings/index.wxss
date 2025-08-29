@@ -97,7 +97,6 @@
   opacity: 0.9;
 }
 
-/* 退出登录按钮区域 */
 .logout-section {
   margin-top: 32rpx;
 }

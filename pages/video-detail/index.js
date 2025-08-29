@@ -1,7 +1,4 @@
-// pages/video-detail/index.js
-// 引入封装的请求模块
 const { get, post } = require('../../utils/request');
-// 引入工具函数
 const { formatCommentTime } = require('../../utils/utils');
 
 Page({
@@ -11,13 +8,14 @@ Page({
       title: '',
       content: '',
       images: [],
-      video: '', // 原模板使用 video 而不是 videoUrl
+      video: '', 
       tags: [],
       location: '',
       createTime: '',
       likeCount: 0,
       commentCount: 0,
-      author: { // 原模板使用 author
+      collectCount:0,
+      author: { 
         id: '',
         avatar: '',
         nickname: '小番薯',
@@ -28,22 +26,21 @@ Page({
     comments: [],
     isFollowing: false,
     isLiked: false,
-    isFavorited: false,
+    isCollected: false,
     currentPage: 1,
     hasMore: true,
     isLoading: false,
     commentsLoaded: false,
     focusComment: false,
-    showCommentInput: true, // 总是显示底部评论输入框
-    replyToId: '', // 回复的评论ID
-    replyToNickname: '', // 回复的用户昵称
-    // 视频相关
+    showCommentInput: true, 
+    replyToId: '',
+    replyToNickname: '', 
+
     isPlaying: false,
     videoDuration: 0,
     videoCurrentTime: 0,
-    // 新增字段
+
     showComment: false,
-    _commentObserver: null
   },
 
   onLoad(options) {
@@ -67,7 +64,6 @@ Page({
       if (res.status) {
         const noteDetail = res.data?.noteDetail || {};
 
-        // 同步到原模板所需字段
         const author = noteDetail.author || {};
         this.setData({
           note: {
@@ -75,31 +71,27 @@ Page({
             title: noteDetail.title || '',
             content: noteDetail.content || '',
             images: Array.isArray(noteDetail.images) ? noteDetail.images : [],
-            video: noteDetail.videoUrl || '', // 原模板使用 video 字段
+            video: noteDetail.videoUrl || '',
             tags: Array.isArray(noteDetail.tags) ? noteDetail.tags : [],
             location: noteDetail.locationName || '',
             createTime: noteDetail.createdAt || '',
             likeCount: noteDetail.likeCount || 0,
             commentCount: noteDetail.commentCount || 0,
-            favoriteCount: noteDetail.favoriteCount || 0,
+            collectCount: noteDetail.collectCount || 0,
             author: {
               id: author.id || '',
               avatar: author.avatar || '',
               nickname: author.nickname || '小番薯',
               signature: author.signature || '',
-              isFollowing: false // 初始化为false，后续通过接口查询
+              isFollowing: false 
             }
           }
         });
-
-        // 检查登录状态，如果已登录则查询点赞、收藏和关注状态
         const token = wx.getStorageSync('token');
         if (token) {
           this.checkFollowStatus();
           this.checkLikeAndCollectStatus();
         }
-
-  
       } else {
         throw new Error(res.message || '获取笔记详情失败');
       }
@@ -138,7 +130,7 @@ Page({
       if (res.status && res.data) {
         this.setData({
           isLiked: !!res.data.isLiked,
-          isFavorited: !!res.data.isCollected
+          isCollected: !!res.data.isCollected
         });
       }
     } catch (error) {
@@ -163,7 +155,6 @@ Page({
         const newComments = Array.isArray(data.comments) ? data.comments : [];
         const pagination = data.pagination || {};
       
-        // 格式化评论数据
         const formattedComments = newComments.map(comment => ({
           id: comment.id,
           content: comment.content,
@@ -184,18 +175,13 @@ Page({
           } : null
         }));
 
-        // 将评论按照层级关系重新组织
-        const primaryComments = []; // 一级评论列表
-        const secondaryComments = {}; // 二级评论映射 {replyToId: [comments]}
-
-        // 分离一级评论和二级评论
+        const primaryComments = []; 
+        const secondaryComments = {}; 
         formattedComments.forEach(comment => {
           if (!comment.replyTo) {
-            // 一级评论
-            comment.replies = []; // 添加回复列表
+            comment.replies = []; 
             primaryComments.push(comment);
           } else {
-            // 二级评论，按照回复的目标ID分组
             const replyToId = comment.replyTo.id;
             if (!secondaryComments[replyToId]) {
               secondaryComments[replyToId] = [];
@@ -204,18 +190,16 @@ Page({
           }
         });
 
-        // 将二级评论附加到对应的一级评论下
         primaryComments.forEach(primaryComment => {
           if (secondaryComments[primaryComment.id]) {
             primaryComment.replies = secondaryComments[primaryComment.id];
           }
         });
 
-        // 由于新接口不支持分页，直接使用返回的所有评论
         this.setData({
-          comments: primaryComments, // 只显示一级评论，二级评论在replies中
+          comments: primaryComments, 
           currentPage: pagination.current || 1,
-          hasMore: false // 新接口返回所有评论，没有分页
+          hasMore: false 
         });
       }
     } catch (error) {
@@ -235,7 +219,6 @@ Page({
 
   // 关注状态改变
   handleFollowChange(e) {
-    // follow-button 组件已经处理了请求，这里只需要同步状态
     const { isFollowing, userId } = e.detail;
     this.setData({
       isFollowing,
@@ -259,7 +242,6 @@ Page({
       return;
     }
 
-    // 乐观更新UI
     const prevLiked = this.data.isLiked;
     const prevCount = this.data.note.likeCount || 0;
     const nextLiked = !prevLiked;
@@ -283,8 +265,6 @@ Page({
         title: nextLiked ? '点赞成功' : '已取消点赞',
         icon: 'success'
       });
-
-      // 重新查询状态确保数据一致性
       this.checkLikeAndCollectStatus();
     } catch (error) {
       // 回滚UI状态
@@ -302,7 +282,7 @@ Page({
   },
 
   // 收藏 - 与 action-bar 保持一致
-  async handleFavorite() {
+  async handleCollect() {
     const token = wx.getStorageSync('token');
     if (!token) {
       wx.showToast({
@@ -317,15 +297,14 @@ Page({
       return;
     }
 
-    // 乐观更新UI
-    const prevFavorited = this.data.isFavorited;
-    const prevCount = this.data.note.favoriteCount || 0;
-    const nextFavorited = !prevFavorited;
-    const nextCount = Math.max(0, prevCount + (nextFavorited ? 1 : -1));
+    const prevCollected = this.data.isCollected;
+    const prevCount = this.data.note.collectCount || 0;
+    const nextCollect = !prevCollected;
+    const nextCount = Math.max(0, prevCount + (nextCollect ? 1 : -1));
 
     this.setData({
-      isFavorited: nextFavorited,
-      'note.favoriteCount': nextCount
+      isCollected: nextCollect,
+      'note.collectCount': nextCount
     });
 
     try {
@@ -338,17 +317,16 @@ Page({
       }
 
       wx.showToast({
-        title: nextFavorited ? '收藏成功' : '已取消收藏',
+        title: nextCollect ? '收藏成功' : '已取消收藏',
         icon: 'success'
       });
 
-      // 重新查询状态确保数据一致性
       this.checkLikeAndCollectStatus();
     } catch (error) {
       // 回滚UI状态
       this.setData({
-        isFavorited: prevFavorited,
-        'note.favoriteCount': prevCount
+        isCollected: prevCollected,
+        'note.collectCount': prevCount
       });
       
       console.error('收藏操作失败:', error);
@@ -363,22 +341,21 @@ Page({
   handleComment() {
     this.setData({ 
       showComment: true,
-      showCommentInput: false // 显示评论弹出层时隐藏底部评论输入框
+      showCommentInput: false 
     });
     
-    // 每次点击都重新加载评论，确保获取最新数据
     this.loadComments({ reset: true });
     this.setData({ commentsLoaded: true });
   },
 
   // 评论输入框聚焦
   onCommentFocus() {
-    // 可以在这里处理聚焦时的逻辑，比如调整布局
+    
   },
 
   // 评论输入框失焦
   onCommentBlur() {
-    // 可以在这里处理失焦时的逻辑
+    
   },
 
 
@@ -388,18 +365,12 @@ Page({
     this.setData({ 
       showComment: false,
       focusComment: false,
-      showCommentInput: true // 隐藏评论弹出层时重新显示底部评论输入框
+      showCommentInput: true 
     });
   },
 
-  // 跳转到搜索页面
-  goToSearch() {
-    wx.navigateTo({
-      url: '/pages/search/search'
-    });
-  },
 
-  // 跳转到作者主页
+  // 跳转到作者主页 待开发
   goToAuthorProfile() {
     if (this.data.note.author.id) {
       // wx.navigateTo({
@@ -424,7 +395,6 @@ Page({
   onVideoPause() {
     this.setData({ isPlaying: false });
   },
-
   // 视频时间更新
   onTimeUpdate(e) {
     const { currentTime, duration } = e.detail;
@@ -458,7 +428,6 @@ Page({
       imageUrl: this.data.note.images && this.data.note.images[0] || ''
     };
   },
-
   // 返回上一页
   goBack() {
     wx.navigateBack();
@@ -472,18 +441,13 @@ Page({
   },
 
   // 评论发送成功
-  onCommentSuccess(e) {
-    const { comment, isReply } = e.detail;
-    
-    
-    // 重新加载评论列表
+  onCommentSuccess() {
     this.loadComments({ reset: true });
     
-    // 更新评论数量
     const currentCount = this.data.note.commentCount || 0;
     this.setData({
       'note.commentCount': currentCount + 1,
-      replyToId: '', // 清空回复状态
+      replyToId: '',
       replyToNickname: ''
     });
   },

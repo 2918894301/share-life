@@ -1,7 +1,7 @@
 /* 底部评论输入框组件样式 */
 .comment-input-wrapper {
   position: fixed;
-  bottom: 0; /* 默认贴底 */
+  bottom: 0; 
   left: 0;
   right: 0;
   z-index: 1000;
@@ -12,12 +12,10 @@
   transition: transform 0.3s ease;
 }
 
-/* 当页面有action-bar时，输入框位于action-bar上方 */
 .comment-input-wrapper.with-action-bar {
   bottom: calc(60rpx + env(safe-area-inset-bottom));
 }
 
-/* 当在评论弹出层中时，使用绝对定位固定在底部 */
 .comment-popup .comment-input-wrapper {
   position: absolute;
   bottom: 0;
@@ -27,7 +25,7 @@
   transform: none;
   border-top: 1rpx solid #f0f0f0;
   border-radius: 0;
-  background: #fff; /* 确保有实体背景 */
+  background: #fff;
 }
 
 .comment-input-wrapper.show {
@@ -38,7 +36,7 @@
   padding: 15rpx 30rpx;
 }
 
-/* 回复提示 */
+
 .reply-hint {
   display: flex;
   align-items: center;
@@ -68,7 +66,6 @@
   margin-left: 16rpx;
 }
 
-/* 统一的长条形输入框设计 */
 .unified-input-wrapper {
   display: flex;
   align-items: center;
@@ -95,7 +92,6 @@
   color: #999;
 }
 
-/* 功能按钮组 */
 .action-buttons-group {
   display: flex;
   align-items: center;
@@ -118,7 +114,6 @@
   background: rgba(0, 0, 0, 0.05);
 }
 
-/* 表情图标 */
 .emoji-icon {
   width: 24rpx;
   height: 24rpx;
@@ -131,14 +126,12 @@
   mask-size: cover;
 }
 
-/* @图标 */
 .mention-icon {
   font-size: 22rpx;
   font-weight: bold;
   color: #999;
 }
 
-/* 发送按钮 */
 .send-btn {
   min-width: 70rpx;
   height: 48rpx;

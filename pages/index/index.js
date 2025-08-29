@@ -1,5 +1,5 @@
 /**
- * 首页页面 - 类似小红书的信息流主页
+ * 首页页面
  * 功能：
  * - 瀑布流展示笔记列表
  * - 分类筛选切换
@@ -8,19 +8,14 @@
  * - 点赞交互功能
  * - 搜索和发布导航
  */
-
-// 引入封装的请求模块
 const { get, post } = require('../../utils/request');
 
 Page({
-  /**
-   * 页面数据定义
-   */
+
   data: {
     statusBarHeight: 0,     // 状态栏高度，用于适配不同设备
     navHeight: 44,          // 导航栏高度
-    
-    // 分类数据 - 从服务器动态获取，默认包含推荐
+
     categories: [
       { id: 0, name: '推荐' },
       { id: 1, name: '旅行' },
@@ -29,12 +24,11 @@ Page({
       { id: 4, name: '健身' }
     ],
     
-    currentTab: 0,          // 当前选中的分类索引
+    currentTab: 0,        
     
-    // 笔记数据 - 瀑布流布局
     contentList: [],        // 完整的笔记列表
-    leftList: [],          // 左列笔记（瀑布流）
-    rightList: [],         // 右列笔记（瀑布流）
+    leftList: [],          
+    rightList: [],        
     
     // 分页参数
     pageNum: 1,            
@@ -42,17 +36,15 @@ Page({
     hasMore: true,        
     
     // 加载状态
-    isRefreshing: false,   // 是否正在刷新
-    isLoadingMore: false   // 是否正在加载更多
+    isRefreshing: false,   
+    isLoadingMore: false   
   },
   
-  /**
-   * 页面加载时的初始化处理
-   */
+
   onLoad() {
     // 获取系统信息，适配不同设备的状态栏和导航栏高度
     const systemInfo = wx.getSystemInfoSync();
-    const navHeight = 44; // 导航栏固定高度
+    const navHeight = 44; 
     
     this.setData({
       statusBarHeight: systemInfo.statusBarHeight,
@@ -61,7 +53,7 @@ Page({
     
     // 加载分类数据和初始内容
     this.loadCategories();
-    this.loadInitialData(); // 加载公共信息流
+    this.loadInitialData(); 
   },
   
   /**
@@ -70,14 +62,10 @@ Page({
    */
   async loadCategories() {
     try {
-      // 请求分类数据（无需登录鉴权）
       const res = await get('/categories', {}, { auth: false });
-      
       if (res.status) {
-        // 构建分类列表，推荐分类固定在第一位
         const categories = [{ id: 0, name: '推荐' }];
-        
-        // 添加服务器返回的分类数据
+
         const serverList = (res.data && Array.isArray(res.data)) ? res.data : [];
         serverList.forEach(category => {
           categories.push({ id: category.id, name: category.name });
@@ -105,11 +93,10 @@ Page({
       
       return {
         id: note.id,
-        title: note.title || note.content || '',    // 标题，支持内容作为标题
-        content: note.content || '',                // 内容
-        isVideo: !!note.isVideo,                   // 是否为视频笔记
-        
-        // 作者信息标准化
+        title: note.title || note.content || '',    
+        content: note.content || '',                
+        isVideo: !!note.isVideo,                   
+      
         user: {
           id: note.author?.id || '',
           username: note.author?.username || '',
@@ -117,23 +104,20 @@ Page({
           avatar: note.author?.avatar || ''
         },
         
-        // 统计数据
-        likeCount: note.likeCount || 0,           // 点赞数
-        commentCount: note.commentCount || 0,     // 评论数
-        collectCount: note.collectCount || 0,     // 收藏数
-        viewCount: note.viewCount || 0,           // 查看数
+        likeCount: note.likeCount || 0,           
+        commentCount: note.commentCount || 0,     
+        collectCount: note.collectCount || 0,     
+        viewCount: note.viewCount || 0,           
         
-        // 媒体资源
-        images: note.images || [],                // 图片列表
-        coverImageUrl: note.coverImageUrl || '' , // 封面图
+        images: note.images || [],               
+        coverImageUrl: note.coverImageUrl || '' , 
         
         // 其他信息
-        createdAt: note.createdAt || '',          // 创建时间
-        isLiked: !!note.isLiked                   // 当前用户是否已点赞
+        createdAt: note.createdAt || '',          
+        isLiked: !!note.isLiked                
       };
     });
   },
-  // 更新瀑布流数据
   updateWaterfallData(notes) {
     const leftList = [...this.data.leftList];
     const rightList = [...this.data.rightList];
@@ -144,23 +128,19 @@ Page({
     return { leftList, rightList };
   },
 
-  // 组装公共流分页查询参数
   buildListParams(page) {
     const params = { page, pageSize: this.data.pageSize };
     if (this.data.currentTab > 0) {
       const category = this.data.categories[this.data.currentTab];
       if (category && category.id) params.categoryId = category.id;
     }
-    // 如果登录，传 userId 以返回是否已点赞
     const userId = wx.getStorageSync('userId');
     if (userId) params.userId = userId;
     return params;
   },
 
-  // 加载初始数据（公共流，page:1）
   async loadInitialData() {
     try {
-      // 重置数据
       this.setData({
         contentList: [],
         leftList: [],
@@ -169,7 +149,6 @@ Page({
         hasMore: true
       });
       
-      // 请求数据（无需鉴权），推荐页不传 categoryId
       const params = this.buildListParams(1);
       const res = await get('/latest', params, { auth: false });
       
@@ -195,7 +174,6 @@ Page({
     }
   },
 
-  // 加载更多数据（公共流）
   async loadMore() {
     if (!this.data.hasMore || this.data.isLoadingMore) return;
     
@@ -211,7 +189,6 @@ Page({
         const list = Array.isArray(pageData.data) ? pageData.data : [];
         
         if (list.length === 0) {
-          // 没有更多数据了
           this.setData({ hasMore: false });
           return;
         }
@@ -241,20 +218,14 @@ Page({
     }
   },
 
-
-
   // 下拉刷新
   async onRefresh() {
     if (this.data.isRefreshing) return;
     
     this.setData({ isRefreshing: true });
-    
     try {
-      // 添加延迟让刷新过程
       await new Promise(resolve => setTimeout(resolve, 800));
-      
       await this.loadInitialData();
-      
       // 确保刷新动画至少显示一段时间
       await new Promise(resolve => setTimeout(resolve, 500));
     } catch (error) {
@@ -274,7 +245,7 @@ Page({
     this.loadInitialData();
   },
   
-  // 下拉刷新（scroll-view 的 refresher）
+  // 下拉刷新
   onPullDownRefresh() {
     this.onRefresh();
   },
@@ -289,9 +260,6 @@ Page({
     wx.navigateTo({ url: '/pages/search/search' });
   },
   
-
-
-  // 点赞/取消点赞（来自 note-card 的事件）
   /**
    * 处理note-card组件的点赞状态变化
    * 同步更新左右列与总列表中的该卡片数据
@@ -299,8 +267,6 @@ Page({
   onLikeChanged(e) {
     const { note } = e.detail || {};
     if (!note || !note.id) return;
-
-    // 同步更新左右列与总列表中的该卡片
     const updateLocalNote = (list) => list.map(n => 
       n.id === note.id ? { ...n, isLiked: note.isLiked, likeCount: note.likeCount } : n
     );

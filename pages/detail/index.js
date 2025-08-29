@@ -1,7 +1,4 @@
-// pages/detail/index.js
-// 引入封装的请求模块
 const { get, post } = require('../../utils/request');
-// 引入工具函数
 const { formatCommentTime } = require('../../utils/utils');
 
 Page({
@@ -13,12 +10,12 @@ Page({
       images: [],
       // videoUrl: '',
       tags: [],
-      location: '', // WXML 使用 location
-      createTime: '', // WXML 使用 createTime
+      location: '', 
+      createTime: '', 
       likeCount: 0,
-      favoriteCount: 0, // WXML 使用 favoriteCount
+      collectCount: 0, 
       commentCount: 0,
-      userInfo: { // WXML 使用 userInfo
+      userInfo: { 
         id: '',
         avatar: '',
         nickname: '小生活',
@@ -29,16 +26,14 @@ Page({
     comments: [],
     isFollowing: false,
     isLiked: false,
-    isFavorited: false,
+    isCollected: false,
     currentPage: 1,
     hasMore: true,
     isLoading: false,
-    commentsLoaded: false,
-    _commentObserver: null,
-    showCommentInput: true, // 总是显示底部评论输入框
-    replyToId: '', // 回复的评论ID
-    replyToNickname: '', // 回复的用户昵称
-    swiperHeight: 400, // 默认轮播图高度
+    showCommentInput: true, 
+    replyToId: '', 
+    replyToNickname: '', 
+    swiperHeight: 400, 
 
   },
   //上一个页面传输数据
@@ -50,26 +45,9 @@ Page({
     this.fetchNoteDetail();
     this.checkUserInteraction();
     this.checkFollowStatus();
+    this.loadComments();
   },
 
-  onReady() {
-    // 懒加载评论：当评论区域进入视口时加载
-    try {
-      const observer = wx.createIntersectionObserver(this, { thresholds: [0.1] });
-      observer.relativeToViewport({ bottom: 100 });
-      observer.observe('.comment-section', (res) => {
-        if (res.intersectionRatio > 0 && !this.data.commentsLoaded) {
-          this.loadComments({ reset: true });
-          this.setData({ commentsLoaded: true });
-        }
-      });
-      this.setData({ _commentObserver: observer });
-    } catch (_) {}
-  },
-
-  onUnload() {
-    try { this.data._commentObserver && this.data._commentObserver.disconnect(); } catch (_) {}
-  },
 
   // 图片加载完成处理
   onImageLoad(e) {
@@ -85,7 +63,7 @@ Page({
       const imageHeight = (height * screenWidth) / width;
       
       // 设置合理的高度范围
-      const minHeight = 200; // 最小高度300px
+      const minHeight = 200; // 最小高度200px
       const maxHeight = systemInfo.windowHeight * 0.75; // 最大高度为屏幕高度的75%
       const finalHeight = Math.max(minHeight, Math.min(imageHeight, maxHeight));
       // 动态设置swiper高度，所有图片都会在这个高度内自适应显示
@@ -103,10 +81,9 @@ Page({
     const currentImage = this.data.noteData.images[index];
     const allImages = this.data.noteData.images;
     
-    // 使用微信小程序的图片预览API
     wx.previewImage({
-      current: currentImage, // 当前显示图片的链接
-      urls: allImages, // 需要预览的图片链接列表
+      current: currentImage, 
+      urls: allImages, 
       success: () => {
 
       },
@@ -143,7 +120,7 @@ Page({
             location: noteDetail.locationName || '',
             createTime: noteDetail.createdAt || '',
             likeCount: noteDetail.likeCount || 0,
-            favoriteCount: noteDetail.collectCount || 0,
+            collectCount: noteDetail.collectCount || 0,
             commentCount: noteDetail.commentCount || 0,
             userInfo: {
               id: author.id || '',
@@ -167,7 +144,7 @@ Page({
   async checkUserInteraction() {
     const token = wx.getStorageSync('token');
     if (!token) {
-      this.setData({ isLiked: false, isFavorited: false });
+      this.setData({ isLiked: false, isCollected: false });
       return;
     }
     try {
@@ -175,7 +152,7 @@ Page({
       if (res && res.status && res.data) {
         this.setData({
           isLiked: !!res.data.isLiked,
-          isFavorited: !!res.data.isCollected
+          isCollected: !!res.data.isCollected
         });
       }
     } catch (error) {
@@ -201,7 +178,7 @@ Page({
     }
   },
 
-  // 加载评论：使用新的/comments接口
+  // 加载评论
   async loadComments() {
     if (this.data.isLoading) return;
 
@@ -217,7 +194,7 @@ Page({
         const newComments = Array.isArray(data.comments) ? data.comments : [];
         const pagination = data.pagination || {};
       
-        // 格式化评论数据
+ 
         const formattedComments = newComments.map(comment => ({
           id: comment.id,
           content: comment.content,
@@ -238,18 +215,16 @@ Page({
           } : null
         }));
 
-        // 将评论按照层级关系重新组织
-        const primaryComments = []; // 一级评论列表
-        const secondaryComments = {}; // 二级评论映射 {replyToId: [comments]}
+
+        const primaryComments = []; 
+        const secondaryComments = {}; 
 
         // 分离一级评论和二级评论
         formattedComments.forEach(comment => {
           if (!comment.replyTo) {
-            // 一级评论
-            comment.replies = []; // 添加回复列表
+            comment.replies = []; 
             primaryComments.push(comment);
           } else {
-            // 二级评论，按照回复的目标ID分组
             const replyToId = comment.replyTo.id;
             if (!secondaryComments[replyToId]) {
               secondaryComments[replyToId] = [];
@@ -258,18 +233,16 @@ Page({
           }
         });
 
-        // 将二级评论附加到对应的一级评论下
         primaryComments.forEach(primaryComment => {
           if (secondaryComments[primaryComment.id]) {
             primaryComment.replies = secondaryComments[primaryComment.id];
           }
         });
 
-        // 由于新接口不支持分页，直接使用返回的所有评论
         this.setData({
-          comments: primaryComments, // 只显示一级评论，二级评论在replies中
+          comments: primaryComments, 
           currentPage: pagination.current || 1,
-          hasMore: false // 新接口返回所有评论，没有分页
+          hasMore: false 
         });
       }
     } catch (error) {
@@ -279,19 +252,8 @@ Page({
       this.setData({ isLoading: false });
     }
   },
-
-  // 点击评论按钮
-  handleComment() {
-    this.setData({ showCommentInput: true });
-  },
-
-
-
-
-
   // 关注状态变化
   handleFollowChange(e) {
-    // follow-button 组件已经处理了请求，这里只需要同步状态
     const { isFollowing, userId } = e.detail;
     this.setData({
       isFollowing,
@@ -309,27 +271,22 @@ Page({
   },
 
   // 处理action-bar的收藏事件
-  handleFavorite(e) {
-    const { isFavorited, favoriteCount } = e.detail;
+  handleCollect(e) {
+    const { isCollected, collectCount } = e.detail;
     this.setData({
-      isFavorited,
-      'noteData.favoriteCount': favoriteCount
+      isCollected,
+      'noteData.collectCount': collectCount
     });
   },
 
-  // 分享
+  // 分享  待开发
   handleShare() {
     wx.showShareMenu({ withShareTicket: true, menus: ['shareAppMessage', 'shareTimeline'] });
   },
 
-
-
   // 评论发送成功
-  onCommentSuccess(e) {
-    // 重新加载评论列表
+  onCommentSuccess() {
     this.loadComments({ reset: true });
-    
-    // 更新评论数量
     const currentCount = this.data.noteData.commentCount || 0;
     this.setData({
       'noteData.commentCount': currentCount + 1,
@@ -348,13 +305,6 @@ Page({
     this.setData({
       replyToId: '',
       replyToNickname: ''
-    });
-  },
-
-  // 隐藏评论输入框
-  onCommentInputHide() {
-    this.setData({
-      showCommentInput: false
     });
   },
 

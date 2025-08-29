@@ -1,4 +1,3 @@
-// 引入封装的请求模块
 const { uploadFile, post } = require('../../utils/request');
 
 Page({
@@ -12,14 +11,12 @@ Page({
     isLoading: false,
     tempAvatarPath: '' // 临时头像路径
   },
-
   onLoad() {
     this.getCurrentUser();
   },
 
   // 获取当前用户信息
   getCurrentUser() {
-    // 从本地存储获取用户信息
     const userInfo = wx.getStorageSync('userInfo');
     
     if (userInfo) {
@@ -32,7 +29,6 @@ Page({
         }
       });
     } else {
-      // 如果本地没有用户信息，跳转到登录页
       wx.showToast({
         title: '请先登录',
         icon: 'none',
@@ -47,7 +43,6 @@ Page({
     }
   },
 
-  // 选择头像
   chooseAvatar() {
     wx.chooseImage({
       count: 1,
@@ -55,8 +50,6 @@ Page({
       sourceType: ['album', 'camera'],
       success: (res) => {
         const tempFilePath = res.tempFilePaths[0];
-        
-        // 检查文件类型是否为图片
         if (!/\.(jpg|jpeg|png|gif|webp)$/i.test(tempFilePath)) {
           wx.showToast({
             title: '只能上传图片文件',
@@ -90,7 +83,6 @@ Page({
 
   // 保存用户信息
   async saveUserInfo() {
-    // 验证昵称
     if (!this.data.userInfo.nickname.trim()) {
       wx.showToast({
         title: '请输入昵称',
@@ -107,28 +99,21 @@ Page({
     });
 
     try {
-      // 显示保存中提示
       wx.showLoading({
         title: '保存中...'
       });
       
-      // 准备表单数据
       const formData = {
         nickname: this.data.userInfo.nickname,
         signature: this.data.userInfo.bio
       };
       
-      // 确定要上传的头像路径
       const avatarPath = this.data.tempAvatarPath || this.data.userInfo.avatar;
-      
-      // 检查是否需要上传头像
       const needUploadAvatar = this.data.tempAvatarPath && 
                               (this.data.tempAvatarPath.startsWith('http://tmp') || 
                                this.data.tempAvatarPath.startsWith('wxfile://'));
-      
       let res;
       if (needUploadAvatar) {
-        // 使用uploadFile方法上传头像和其他数据
         res = await uploadFile(
           '/users/updateUserInfo',
           avatarPath,
@@ -136,12 +121,11 @@ Page({
           formData,
           {
             auth: true,
-            loading: false, // 已经显示了loading
+            loading: false, 
             toast: true
           }
         );
       } else {
-        // 只更新用户信息，不上传头像
         res = await post('/users/updateUserInfo', formData, {
           auth: true,
           loading: false,
@@ -149,9 +133,7 @@ Page({
         });
       }
       
-      // 处理响应
       if (res.status) {
-        // 更新本地存储的用户信息
         const userData = res.data;
         wx.setStorageSync('userInfo', userData);
         
@@ -161,7 +143,6 @@ Page({
           icon: 'success'
         });
         
-        // 返回上一页并刷新
         const pages = getCurrentPages();
         const prevPage = pages[pages.length - 2];
         if (prevPage && prevPage.getCurrentUser) {
@@ -219,7 +200,6 @@ Page({
         duration: 1500
       });
 
-      // 延迟跳转到登录页面
       setTimeout(() => {
         wx.reLaunch({
           url: '/pages/login/login'

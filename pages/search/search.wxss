@@ -1,4 +1,3 @@
-/* search.wxss */
 page {
   background: #fff;
 }
@@ -140,7 +139,6 @@ input {
   background: #fff;
 }
 
-/* 搜索结果统计 */
 .search-stats {
   padding: 16rpx 32rpx;
   border-bottom: 1rpx solid #f0f0f0;
@@ -152,7 +150,6 @@ input {
   color: #666;
 }
 
-/* 加载状态 */
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -185,7 +182,6 @@ input {
   color: #999;
 }
 
-/* 空状态 */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -209,13 +205,4 @@ input {
 .empty-tip {
   font-size: 26rpx;
   color: #999;
-}
-
-/* 原有的loading样式（保留以防兼容性需要） */
-.loading {
-  text-align: center;
-  padding: 10px 0;
-  color: #999;
-  font-size: 12px;
-  margin-bottom: env(safe-area-inset-bottom);
 }

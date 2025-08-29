@@ -1,5 +1,5 @@
 /**
- * 个人中心页面 - 类似小红书的用户个人主页
+ * 个人中心页面
  * 功能：
  * - 显示用户信息和统计数据
  * - 三个标签页：我的笔记、收藏、点赞
@@ -9,15 +9,12 @@
  * - 跳转到设置页面
  */
 
-// 引入封装的请求模块
 const { get, post } = require('../../utils/request');
 
 Page({
-  /**
-   * 页面数据定义
-   */
+
   data: {
-    statusBarHeight: 0,     // 状态栏高度，用于适配
+    statusBarHeight: 0,     
     currentTab: 0,          // 当前选中的标签页：0-我的笔记 1-收藏 2-点赞
     
     // 用户信息
@@ -27,15 +24,13 @@ Page({
       userId: '',
       bio: '这是个人简介',
       stats: { 
-        following: 0,       // 关注数
-        followers: 0,       // 粉丝数
-        likes: 0           // 获赞数
+        following: 0,      
+        followers: 0,       
+        likes: 0          
       }
     },
-    
-    // 统一的标签页数据管理
     tabs: {
-      0: { // 我的笔记
+      0: { 
         list: [],
         leftList: [],
         rightList: [],
@@ -44,7 +39,7 @@ Page({
         api: '/users/noteList',
         emptyText: '还没有发布笔记'
       },
-      1: { // 收藏
+      1: { 
         list: [],
         leftList: [],
         rightList: [],
@@ -53,7 +48,7 @@ Page({
         api: '/users/collectionList',
         emptyText: '还没有收藏内容'
       },
-      2: { // 点赞
+      2: { 
         list: [],
         leftList: [],
         rightList: [],
@@ -66,34 +61,25 @@ Page({
     
     isRefreshing: false         // 是否正在刷新
   },
-
-  // 计算属性：获取当前标签页的数据
   get currentData() {
     return this.data.tabs[this.data.currentTab] || this.data.tabs[0];
   },
 
-  /**
-   * 页面加载完成
-   */
   onLoad() {
-    // 获取系统信息，设置状态栏高度用于适配
     const systemInfo = wx.getSystemInfoSync();
     this.setData({ statusBarHeight: systemInfo.statusBarHeight });
   },
 
   //每次进入页面都会执行，包括从其他页面返回
   onShow() {
-    // 检查登录状态，未登录则跳转到登录页
     const token = wx.getStorageSync('token');
     if (!token) {
       wx.navigateTo({ url: '/pages/login/login' });
       return;
     }
-    // 页面显示时默认刷新当前标签页数据
     this.loadTabData(0, { reset: true });
   },
 
-  //格式化数据
   mapToCardNote(item, userFallback) {
     const author = item.author || item.user || userFallback || {};
     const cover = item.coverImageUrl || '';
@@ -118,7 +104,6 @@ Page({
     };
   },
 
-  // 统一的数据加载方法
   async loadTabData(tabIndex, { reset = false } = {}) {
     const tab = this.data.tabs[tabIndex];
     if (!tab || tab.loading) return;
@@ -160,10 +145,8 @@ Page({
       const nextList = reset ? formattedNotes : [...tab.list, ...formattedNotes];
       const hasMore = (pagination.current || nextPage) < (pagination.totalPages || nextPage);
       
-      // 更新瀑布流数据
       let leftList, rightList;
       if (reset) {
-        // 重置时重新分配
         leftList = [];
         rightList = [];
         nextList.forEach((note, index) => {
@@ -174,7 +157,6 @@ Page({
           }
         });
       } else {
-        // 追加时基于现有数据
         leftList = [...tab.leftList];
         rightList = [...tab.rightList];
         formattedNotes.forEach((note, index) => {
@@ -201,8 +183,7 @@ Page({
       this.setData({ [`tabs.${tabIndex}.loading`]: false });
     }
   },
-
-  // 加载更多数据的统一方法
+  // 加载更多
   loadMore() {
     const { currentTab } = this.data;
     const tab = this.data.tabs[currentTab];
@@ -251,7 +232,6 @@ Page({
     if (this.data.currentTab === index) return;
     this.setData({ currentTab: index });
 
-    // 首次进入标签页时加载数据
     const tab = this.data.tabs[index];
     if (tab && tab.list.length === 0) {
       this.loadTabData(index, { reset: true });
@@ -267,10 +247,8 @@ Page({
     this.setData({ isRefreshing: true });
     
     try {
-      // 添加延迟让刷新过程更加缓慢优雅
       await new Promise(resolve => setTimeout(resolve, 800));
       
-      // 重置当前标签页数据
       this.setData({ 
         [`tabs.${currentTab}.list`]: [],
         [`tabs.${currentTab}.leftList`]: [],
@@ -280,8 +258,6 @@ Page({
       });
       
       await this.loadTabData(currentTab, { reset: true });
-      
-      // 确保刷新动画至少显示一段时间
       await new Promise(resolve => setTimeout(resolve, 500));
     } catch (error) {
       console.error('下拉刷新失败:', error);
@@ -296,7 +272,6 @@ Page({
   onReachBottom() {
     this.loadMore();
   },
-
   // 前往设置页面
   goToSettings() { wx.navigateTo({ url: '/pages/settings/index' }) }
 });

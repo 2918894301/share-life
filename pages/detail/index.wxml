@@ -1,6 +1,4 @@
-<!-- pages/detail/index.wxml -->
 <view class="detail-container">
-  <!-- 图片轮播 -->
   <swiper class="image-swiper" style="height: {{swiperHeight}}px;" indicator-dots="{{true}}" autoplay="{{false}}" circular="{{true}}">
     <swiper-item wx:for="{{noteData.images}}" wx:key="index">
       <view class="swiper-item-container">
@@ -8,7 +6,6 @@
       </view>
     </swiper-item>
   </swiper>
-  <!-- 用户信息区域 -->
   <view class="user-info">
     <view class="user-header">
       <view class="user-left">
@@ -22,32 +19,24 @@
       <follow-button isFollowing="{{isFollowing}}" userId="{{noteData.userInfo.id}}" bind:followChange="handleFollowChange" />
     </view>
   </view>
-  <!-- 笔记内容 -->
   <view class="note-content">
-    <!-- 标题 -->
     <view wx:if="{{noteData.title}}" class="note-title">
       <text class="title">{{noteData.title}}</text>
     </view>
-    <!-- 内容 -->
     <text class="content">{{noteData.content}}</text>
-    <!-- 标签 -->
     <view class="tags">
       <text class="tag" wx:for="{{noteData.tags}}" wx:key="index">#{{item}}</text>
     </view>
-    <!-- 发布时间 -->
     <view class="publish-info">
       <text class="time">{{noteData.createTime}} {{noteData.location ? '·' : ''}}</text>
     </view>
   </view>
   <!-- 评论区域 -->
   <view class="comment-section">
-    <!-- 评论标题 -->
     <view class="comment-header">
       <text class="comment-title">共 {{noteData.commentCount || 0}} 条评论</text>
     </view>
-    <!-- 评论列表 -->
     <view class="comment-list">
-      <!-- 一级评论 -->
       <view class="comment-item" wx:for="{{comments}}" wx:key="id">
         <view class="comment-user">
           <view class="user-avatar">
@@ -62,13 +51,11 @@
               <text class="comment-time">{{item.createTime}}</text>
             </view>
           </view>
-          <!-- 点赞数 -->
           <view class="comment-actions">
             <view class="comment-like" wx:if="{{item.likeCount > 0}}">
               <text class="like-count">{{item.likeCount}}赞</text>
             </view>
           </view>
-          <!-- 二级评论列表 -->
           <view class="replies-list" wx:if="{{item.replies && item.replies.length > 0}}">
             <view class="reply-item" wx:for="{{item.replies}}" wx:for-item="reply" wx:key="id">
               <view class="reply-user">
@@ -94,12 +81,10 @@
           </view>
         </view>
       </view>
-      <!-- 加载状态提示 -->
       <view class="loading-tips" wx:if="{{comments.length > 0}}">
         <view wx:if="{{isLoading && hasMore}}" class="loading">加载中...</view>
         <view wx:if="{{!hasMore}}" class="no-more">没有更多评论了</view>
       </view>
-      <!-- 无评论提示 -->
       <view class="empty-tips" wx:if="{{comments.length === 0 && !isLoading}}">暂无评论，快来抢沙发吧~</view>
     </view>
   </view>
@@ -107,4 +92,4 @@
   <comment-input show="{{showCommentInput}}" noteId="{{noteData.id}}" replyToId="{{replyToId}}" replyToNickname="{{replyToNickname}}" placeholder="{{replyToId ? '回复评论...' : '说点什么...'}}" theme="light" hasActionBar="{{true}}" bind:success="onCommentSuccess" bind:error="onCommentError" bind:cancelReply="onCancelReply" />
 </view>
 <!-- 底部操作栏 -->
-<action-bar noteId="{{noteData.id}}" isLiked="{{isLiked}}" isFavorited="{{isFavorited}}" likeCount="{{noteData.likeCount}}" favoriteCount="{{noteData.favoriteCount}}" commentCount="{{noteData.commentCount}}" bind:like="handleLike" bind:favorite="handleFavorite" bind:comment="handleComment" bind:share="handleShare" />
+<action-bar noteId="{{noteData.id}}" isLiked="{{isLiked}}" isCollected="{{isCollected}}" likeCount="{{noteData.likeCount}}" collectCount="{{noteData.collectCount}}" commentCount="{{noteData.commentCount}}" bind:like="handleLike" bind:collect="handleCollect" bind:comment="handleComment" bind:share="handleShare" />
