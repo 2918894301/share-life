@@ -2,6 +2,8 @@
 
 一个分享个人生活的微信小程序，使用微信原生框架开发，后端使用 Node.js+MySQL+Express 开发。
 
+后端访问地址：[share-life-server](https://github.com/2918894301/share-life-server)
+
 ## 效果展示
 
 ### 首页
